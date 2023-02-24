@@ -52,8 +52,8 @@ class Graph:
         visited[node] = True
         components.add(node)
         for neighbor in self.graph[node]:
-            if not visited[neighbor]:
-                self.dfs(neighbor, visited, components)
+            if not visited[neighbor[0]]:
+                self.dfs(neighbor[0], visited, components)
 
     def connected_components(self):
         visited = [False] * self.nb_nodes
