@@ -12,3 +12,6 @@ print(g)
 g.add_edge("Paris", "Palaiseau", 4, 20)
 print(g)
 """
+
+
+

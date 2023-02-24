@@ -55,6 +55,7 @@ class Graph:
             if not visited[neighbor[0]]:
                 self.dfs(neighbor[0], visited, components)
 
+
     def connected_components(self):
         visited = [False] * self.nb_nodes
         components = []
@@ -76,6 +77,7 @@ class Graph:
         return set(map(frozenset, self.connected_components()))
 
 def graph_from_file(filename):
+    # import graph from a file
         fichier=open(filename)
         lignes=fichier.readlines()
         fichier.close()
