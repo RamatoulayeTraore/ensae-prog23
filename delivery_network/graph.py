@@ -40,6 +40,7 @@ class Graph:
 
         #Donc par exemple, si Node1 existe mais pas node 2, alors n2 sera True et n1 false, et donc on ajouetera node 2 comme voisin de node 1
         
+        #n1 n2 compliqué voir si on peut l'enlever (voir code prof)
         """"
         Adds an edge to the graph. Graphs are not oriented, hence an edge is added to the adjacency list of both end nodes. 
 
