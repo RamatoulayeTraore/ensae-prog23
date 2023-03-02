@@ -16,23 +16,30 @@ class Graph:
                 output += f"{source}-->{destination}\n"
         return output
     
+    #pour chaque noeud, on aura une sous liste de noeud composés de triplets, qui donneront ses voisins(une sous liste par voisins), 
+    #un power min et la distance (en général 1). Voir test pour vérifier/comprendre
     def add_edge(self, node1, node2, power_min, dist=1):
-        n1,n2=0,0
+        #on peut parametrer une distance, mais par défaut elle vaudra 1
+        n1,n2=False,False
         if (node1 not in self.nodes):
-            n1=1
+            n1=True
             self.nodes.append(node1)
             self.nb_nodes +=1
             self.graph[node1]=[node2,power_min,dist]
         if (node2 not in self.nodes):
-            n2=1
+            n2=True
             self.nodes.append(node2)
             self.nb_nodes +=1
             self.graph[node2]=[node1,power_min,dist]
            
 
-        if n1==0:self.graph[node1].append([node2,power_min,dist])
-        if n2==0:self.graph[node2].append([node1,power_min,dist])
+        if n1==False:self.graph[node1].append([node2,power_min,dist])
+        #si le noeud avait déja été creér, on rajoute juste le voisin là en plus, sinon il existait deja via la fonction en haut
+        if n2==False:self.graph[node2].append([node1,power_min,dist])
         self.nb_edges +=1
+
+        #Donc par exemple, si Node1 existe mais pas node 2, alors n2 sera True et n1 false, et donc on ajouetera node 2 comme voisin de node 1
+        
         """"
         Adds an edge to the graph. Graphs are not oriented, hence an edge is added to the adjacency list of both end nodes. 
 
