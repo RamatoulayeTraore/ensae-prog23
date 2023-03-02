@@ -60,21 +60,29 @@ class Graph:
         visited[node] = True
         components.add(node)
         for neighbor in self.graph[node]:
+        #pour chacun des noeuds associés, on les parcourt 
             if not visited[neighbor[0]]:
+            #si le voisin n'est pas visité, on lui applique lui-même la fonction etc. et 
+            #une fois que tous ses voisins auront été visités ca va remonter au noeud antérieur etc.
+            #jusqu'à ce que tous les noeuds aient été visités
                 self.dfs(neighbor[0], visited, components)
 
 
     def connected_components(self):
         visited = [False] * self.nb_nodes
+        #créer une liste aun nb de false egale au nombre de noeuds du graph
         components = []
         for node in range(self.nb_nodes):
             if not visited[node]:
+            #si le ieme noeud vaut false i.e n'a pas été visité 
                 composantes = set()
+                #la diff avec une liste c'est que un set n'est pas ordonné
                 self.dfs(node, visited, composantes)
+                #on va vaoir le composantes rempli de toutes les villes connexes et ensuite on l'ajoute comme sous liste à component 
+                #et on reprend avec les noeud pas encore explorés
                 components.append(list(composantes))
-        return components
-
-        
+        return components 
+    
         
     
     def connected_components_set(self):
@@ -82,7 +90,11 @@ class Graph:
         The result should be a set of frozensets (one per component), 
         For instance, for network01.in: {frozenset({1, 2, 3}), frozenset({4, 5, 6, 7})}
         """
+        #map : prend une fonction et l'appliques à tous les éléments de la liste 
+        #ici la fonction c'est frozenset qui fige les éléments de la liste components
+        #on prend la liste de liste, chaque éléments devient une frozenset et il fait du tout un set via map
         return set(map(frozenset, self.connected_components()))
+
 
 def graph_from_file(filename):
     # import graph from a file
