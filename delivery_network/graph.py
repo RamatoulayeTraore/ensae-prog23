@@ -99,19 +99,38 @@ class Graph:
         return set(map(frozenset, self.connected_components()))
 
 
+#on veut une fonction qui nous donne tous les chemins possibles pour l'utiliser plus tard
+    def reachable(self, start ,end, visited) :
+        res = []
+        res_all_paths = []
+        if start not in visited:
+            visited.append(start)
+            for neighbor in self.graph[start]: 
+                if neighbor[0] == end:
+                    res.append(end)
+                else :
+                    sub_paths = self.reachable(neighbor[0],end,visited)
+                    res.append(sub_paths)
+            for item in res :
+                t=[start]
+                t.extend(item)
+                res_all_paths.append(t)
+                #on créer un chemin qui commence par strat, on ajoute tous les chemins et on met le tout dans la var res_all_paths
+                #on a ajoutéstart à tous les sous chemins
+                #extend permet d'ajouter un element à chaque liste au lieu d'ajouter une liste à la liste de listes
+                #ici on ajoute start à toutes les listes
+        return res_all_paths
+            
 
     def get_path_with_power(self, start, end, power):
-        for components in self.connected_components_set() :
-            if start in components and end in components :
+        pass
+
                 #la il va falloir parcourir pour trouver (les) chemins qui les lie
                 #on part de starts et on essaie de regarder les voisins de ce start puis on applique une fonction recusrive 
-                #qui cherhce les autres voisins comme la question precedente
+                #qui cherche les autres voisins comme la question precedente
                 #condition d'arrêt et de trouver end parmi les voisins
                 #on créer une liste et on met start dedans et apres il faudrait ajouter chaque
-                
-           
-        
-            pass
+            
     #il va falloir sommer la distance des arretes entre deux noeuds et la comparer à p 
     #trajet = couple (v,v') auquel il va falloir associer une distance (et une utilité/profit)
     #on donne un départ, une arrivée et un puissance max, s'il existe un trajet qui respecte on retourne un chemin, sinon on retourne none
