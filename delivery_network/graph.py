@@ -73,11 +73,11 @@ class Graph:
 
     def connected_components(self):
         visited = []
-        #créer une liste aun nb de false egale au nombre de noeuds du graph
+        #on créer une liste vide
         components = []
         for node in self.nodes:
             if node not in visited :
-            #si le ieme noeud vaut false i.e n'a pas été visité 
+            #si le noeud n'est pas visité, on créer un set et on applique la fonction au noeud  
                 composantes = set()
                 #la diff avec une liste c'est que un set n'est pas ordonné
                 self.dfs(node, visited, composantes)
