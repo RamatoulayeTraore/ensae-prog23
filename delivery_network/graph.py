@@ -57,23 +57,26 @@ class Graph:
         """
 
     def dfs(self, node, visited, components):
-        visited[node] = True
+        visited.append(node)
         components.add(node)
+        print(f"on vient d'ajouter {node}")
         for neighbor in self.graph[node]:
+        #node c'etst la clef donc on accède aux sous listes associés 
         #pour chacun des noeuds associés, on les parcourt 
-            if not visited[neighbor[0]]:
+            if neighbor[0] not in visited :
             #si le voisin n'est pas visité, on lui applique lui-même la fonction etc. et 
             #une fois que tous ses voisins auront été visités ca va remonter au noeud antérieur etc.
             #jusqu'à ce que tous les noeuds aient été visités
                 self.dfs(neighbor[0], visited, components)
 
 
+
     def connected_components(self):
-        visited = [False] * self.nb_nodes
+        visited = []
         #créer une liste aun nb de false egale au nombre de noeuds du graph
         components = []
-        for node in range(self.nb_nodes):
-            if not visited[node]:
+        for node in self.nodes:
+            if node not in visited :
             #si le ieme noeud vaut false i.e n'a pas été visité 
                 composantes = set()
                 #la diff avec une liste c'est que un set n'est pas ordonné
@@ -94,6 +97,7 @@ class Graph:
         #ici la fonction c'est frozenset qui fige les éléments de la liste components
         #on prend la liste de liste, chaque éléments devient une frozenset et il fait du tout un set via map
         return set(map(frozenset, self.connected_components()))
+
 
 
 def graph_from_file(filename):
