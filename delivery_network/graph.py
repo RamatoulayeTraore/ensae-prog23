@@ -100,6 +100,24 @@ class Graph:
 
 
 
+    def get_path_with_power(self, start, end, power):
+        for components in self.connected_components_set() :
+            if start in components and end in components :
+                #la il va falloir parcourir pour trouver (les) chemins qui les lie
+                #on part de starts et on essaie de regarder les voisins de ce start puis on applique une fonction recusrive 
+                #qui cherhce les autres voisins comme la question precedente
+                #condition d'arrêt et de trouver end parmi les voisins
+                #on créer une liste et on met start dedans et apres il faudrait ajouter chaque
+                
+           
+        
+            pass
+    #il va falloir sommer la distance des arretes entre deux noeuds et la comparer à p 
+    #trajet = couple (v,v') auquel il va falloir associer une distance (et une utilité/profit)
+    #on donne un départ, une arrivée et un puissance max, s'il existe un trajet qui respecte on retourne un chemin, sinon on retourne none
+    
+
+
 def graph_from_file(filename):
     # import graph from a file
         fichier=open(filename)
