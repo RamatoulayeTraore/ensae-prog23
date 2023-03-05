@@ -65,8 +65,6 @@ class Graph:
                 components.append(list(composantes))
         return components
 
-        
-        
     
     def connected_components_set(self):
         """
@@ -74,6 +72,12 @@ class Graph:
         For instance, for network01.in: {frozenset({1, 2, 3}), frozenset({4, 5, 6, 7})}
         """
         return set(map(frozenset, self.connected_components()))
+    
+    def get_path_with_power(self, src, dest, power):
+        
+        raise NotImplementedError   
+        
+    
 
 def graph_from_file(filename):
         fichier=open(filename)
