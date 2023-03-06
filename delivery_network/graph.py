@@ -84,14 +84,11 @@ class Graph:
                 #on va vaoir le composantes rempli de toutes les villes connexes et ensuite on l'ajoute comme sous liste à component 
                 #et on reprend avec les noeud pas encore explorés
                 components.append(list(composantes))
-<<<<<<< HEAD
         return components
 
-=======
-        return components 
     
         
->>>>>>> a9fbd7854ec60b445bc348dafe8c5cb838c1b654
+
     
     def connected_components_set(self):
         """
