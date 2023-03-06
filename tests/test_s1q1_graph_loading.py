@@ -10,6 +10,8 @@ class Test_GraphLoading(unittest.TestCase):
         g = graph_from_file("input/network.00.in")
         self.assertEqual(g.nb_nodes, 10)
         self.assertEqual(g.nb_edges, 9)
+    # quand on run, il nous confirme que les test fonctionnent
+        print(g)
 
     def test_network1(self):
         g = graph_from_file("input/network.01.in")
