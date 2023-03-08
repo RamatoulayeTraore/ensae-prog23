@@ -100,10 +100,6 @@ class Graph:
         #on prend la liste de liste, chaque éléments devient une frozenset et il fait du tout un set via map
         return set(map(frozenset, self.connected_components()))
     
-    def get_path_with_power(self, src, dest, power):
-        
-        raise NotImplementedError   
-        
     
 
 
@@ -130,8 +126,42 @@ class Graph:
         return res_all_paths
             
 
+    
+
     def get_path_with_power(self, start, end, power):
-        pass
+        visited = []
+        res = []
+        # On stocke la distance parcourue depuis le début pour chaque nœud visité
+        distance = {start: 0}
+
+        def dfs(node, current_power, path):
+            nonlocal res
+            visited.append(node)
+            path.append(node)
+            
+            if node == end:
+                # Si on atteint le nœud de destination, on vérifie si la power parcourue est inférieure ou égale à la puissance du camion
+                if current_power <= power:
+                    res = path[:]
+                # On ne retourne rien pour continuer la recherche de chemins possibles
+            
+            elif current_power <= power:
+                for neighbor in self.graph[node]:
+                    # On calcule la power parcourue depuis le début jusqu'à ce voisin
+                    neighbor_power = current_power + neighbor[1]
+                    # Si la power n'a pas déjà été enregistrée pour ce voisin ou si elle est plus petite que la précédente,
+                      # on l'enregistre dans power
+                    if neighbor[0] not in power or neighbor_power < power[neighbor[0]]:
+                        power[neighbor[0]] = neighbor_power
+                        # On continue la recherche à partir de ce voisin
+                        dfs(neighbor[0], neighbor_power, path)
+            
+            # On enlève le nœud visité de la liste de chemins parcourus pour continuer la recherche de chemins possibles
+            path.pop()
+        
+        dfs(start, 0, [])
+        return res
+
 
                 #la il va falloir parcourir pour trouver (les) chemins qui les lie
                 #on part de starts et on essaie de regarder les voisins de ce start puis on applique une fonction recusrive 
@@ -141,9 +171,7 @@ class Graph:
             
     #il va falloir sommer la distance des arretes entre deux noeuds et la comparer à p 
     #trajet = couple (v,v') auquel il va falloir associer une distance (et une utilité/profit)
-    #on donne un départ, une arrivée et un puissance max, s'il existe un trajet qui respecte on retourne un chemin, sinon on retourne none
-    
-
+    #on donne un départ, une arrivée et un puissance max, s'il existe un trajet qui respecte on retourne un chemin, sinon on retourne none
 
 def graph_from_file(filename):
     # import graph from a file
