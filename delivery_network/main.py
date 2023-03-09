@@ -9,7 +9,7 @@ print(g)
 
 
 """g=Graph([])
-g.add_edge("Paris", "Palaiseau", 4, 20)
+g.add_edge("Paris", "Palaiseau", 4)
 print(g)
 """
 
