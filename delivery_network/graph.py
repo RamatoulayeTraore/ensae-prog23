@@ -102,7 +102,9 @@ class Graph:
 #on veut une fonction qui nous donne tous les chemins possibles pour l'utiliser plus tard
     def reachable(self, start ,end, visited) :
         res = []
+        #res est une liste de liste qui va contenir chaque liste de noeud constituant un chemin
         res_all_paths = []
+        #res_all_paths est res augmenté de start donc chaque liste
         if start not in visited:
             visited.append(start)
             for neighbor in self.graph[start]: 
