@@ -1,3 +1,5 @@
+import copy 
+
 class Graph:
     def __init__(self, nodes=[]):
         self.nodes = nodes
@@ -87,7 +89,7 @@ class Graph:
         return components 
     
         
-    
+
     def connected_components_set(self):
         """
         The result should be a set of frozensets (one per component), 
@@ -99,39 +101,45 @@ class Graph:
         return set(map(frozenset, self.connected_components()))
 
 
-#on veut une fonction qui nous donne tous les chemins possibles pour l'utiliser plus tard
-    def reachable(self, start ,end, visited) :
-        res = []
-        #res est une liste de liste qui va contenir chaque liste de noeud constituant un chemin
-        res_all_paths = []
-        #res_all_paths est res augmenté de start donc chaque liste
-        if start not in visited:
-            visited.append(start)
+
+
+
+
+
+
+    tab=0
+    def reachable(self, start ,end, current_path, all_paths) :
+        tab_str = "===" * Graph.tab    
+        if start not in current_path:
+            Graph.tab += 1
+            current_path.append(start)
             for neighbor in self.graph[start]: 
                 if neighbor[0] == end:
-                    res.append(end)
+                    current_path.append(end)
+                    #print(f"{tab_str}{current_path} destination trouvée")
+                    res = copy.copy(current_path)
+                    all_paths.append(res)
+                    current_path.remove(start)
+                    current_path.remove(end)
                 else :
-                    sub_paths = self.reachable(neighbor[0],end,visited)
-                    res.append(sub_paths)
-            for item in res :
-                t=[start]
-                t.extend(item)
-                res_all_paths.append(t)
-                #on créer un chemin qui commence par strat, on ajoute tous les chemins et on met le tout dans la var res_all_paths
-                #on a ajoutéstart à tous les sous chemins
-                #extend permet d'ajouter un element à chaque liste au lieu d'ajouter une liste à la liste de listes
-                #ici on ajoute start à toutes les listes
-        return res_all_paths
+                    #print(f"{tab_str}{current_path} on descend dans les noeuds")
+                    self.reachable(neighbor[0],end,current_path, all_paths)
+            Graph.tab-=1
+            
+        
             
 
     def get_path_with_power(self, start, end, power):
-        pass
+        all_paths =[]
+        current_path=[]
+        self.reachable(start, end, current_path, all_paths)
+        print(all_paths)
+        for path in all_paths:
+            min_power_path = 0
 
-                #la il va falloir parcourir pour trouver (les) chemins qui les lie
-                #on part de starts et on essaie de regarder les voisins de ce start puis on applique une fonction recusrive 
-                #qui cherche les autres voisins comme la question precedente
-                #condition d'arrêt et de trouver end parmi les voisins
-                #on créer une liste et on met start dedans et apres il faudrait ajouter chaque
+        return all_paths
+
+
             
     #il va falloir sommer la distance des arretes entre deux noeuds et la comparer à p 
     #trajet = couple (v,v') auquel il va falloir associer une distance (et une utilité/profit)
