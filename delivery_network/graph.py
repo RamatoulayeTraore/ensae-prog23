@@ -110,41 +110,79 @@ class Graph:
     tab=0
     def reachable(self, start ,end, current_path, all_paths) :
         tab_str = "===" * Graph.tab    
-        if start not in current_path:
-            Graph.tab += 1
-            current_path.append(start)
-            for neighbor in self.graph[start]: 
-                if neighbor[0] == end:
-                    current_path.append(end)
-                    #print(f"{tab_str}{current_path} destination trouvée")
-                    res = copy.copy(current_path)
-                    all_paths.append(res)
-                    current_path.remove(start)
-                    current_path.remove(end)
-                else :
-                    #print(f"{tab_str}{current_path} on descend dans les noeuds")
-                    self.reachable(neighbor[0],end,current_path, all_paths)
-            Graph.tab-=1
+        Graph.tab += 1
+        current_path.append(start)
+        for neighbor in self.graph[start]: 
+            if neighbor[0] == end:
+                print(f"{tab_str}{current_path} destination trouvée")
+                res = copy.copy(current_path)
+                res.append(end)
+                all_paths.append(res)
+            elif  neighbor[0] in current_path :
+                pass
+                print(f"{tab_str}{current_path} skip : deja visité")
+            else :
+                print(f"{tab_str}{current_path} on descend dans les noeuds")
+                self.reachable(neighbor[0],end,current_path, all_paths)
+        current_path.remove(start)      
+        Graph.tab-=1
             
         
-            
+    
+    def get_all_max_powers(self,all_paths) :
+        all_max_powers =[]
+        for path in all_paths:
+            max_edge_power = 0
+            #on va utiliser un systeme de current node next node
+            #on prend un node dans la liste et on regarde la trajet avec chacun des suivants
+            current_node =path[0]
+            for next_node in path[1:] :
+                edge_list=self.graph[current_node]
+                #donne tous les triplets du nodes étudiés (edge)
+                for edge in edge_list :
+                    if edge[0] == next_node :
+                    #si le edge qu'on etudie est bien le next node alors on va prendre la puissance du trajet 
+                        a = edge[1]
+                        if a> max_edge_power :
+                            max_edge_power = a
+                current_node = next_node
+            all_max_powers.append(max_edge_power)
+        return all_max_powers 
+        #si il est plu spuissant que le précédent il deveint le power max
 
     def get_path_with_power(self, start, end, power):
         all_paths =[]
         current_path=[]
         self.reachable(start, end, current_path, all_paths)
+        #on récupère la liste des chemins
         print(all_paths)
-        for path in all_paths:
-            min_power_path = 0
+        power_list = self.get_all_max_powers(all_paths)
+        final_power = min(power_list)
+        if final_power > power :
+            return None
+        else :
+            return all_paths[power_list.index(final_power)]
+        #index est la fonction réciproque de celle qui a t[i] donne li ieme élément de t 
+        #donc t.index(i) me donne la position de i dans t (renvoie la premiere en cas de doublon)
+        #ainsi on peut récupérer le chemin lié à final_power
 
-        return all_paths
+
+
+
+
+
+
+
+                        
+                    
+                    
+
+
+                
 
 
             
-    #il va falloir sommer la distance des arretes entre deux noeuds et la comparer à p 
-    #trajet = couple (v,v') auquel il va falloir associer une distance (et une utilité/profit)
-    #on donne un départ, une arrivée et un puissance max, s'il existe un trajet qui respecte on retourne un chemin, sinon on retourne none
-    
+
 
 
 def graph_from_file(filename):
