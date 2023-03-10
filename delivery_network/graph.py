@@ -258,3 +258,20 @@ def graph_from_file_2(filename):
                 tab_edge.append((Lines[i][0],Lines[i][1],Lines[i][2],1))     
      
         return tab_edge
+
+def plot_graph(graph, start_node, end_node, path, route):
+    dot = graphviz.Digraph()
+    for node in graph:
+        dot.node(node)
+        for neighbor in graph[node]:
+            dot.edge(node, neighbor, label=str(graph[node][neighbor]))
+    dot.node(start_node, style='filled', fillcolor='lightblue')
+    dot.node(end_node, style='filled', fillcolor='lightblue')
+    dot.node(path[0], style='filled', fillcolor='orange')
+    dot.node(path[-1], style='filled', fillcolor='orange')
+    for i in range(len(path) - 1):
+        dot.edge(path[i], path[i+1], color='orange', penwidth='3')
+    for i in range(len(route) - 1):
+        dot.edge(route[i], route[i+1], color='green', penwidth='3')
+    dot.render('graph', format='png', view=True)
+    
