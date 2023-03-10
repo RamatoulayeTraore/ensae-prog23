@@ -218,36 +218,7 @@ class Graph:
 
 
 
-    def reachable(self, start ,end, current_path, all_paths) :
-        tab_str = "===" * Graph.tab    
-        if start not in current_path:
-            Graph.tab += 1
-            current_path.append(start)
-            for neighbor in self.graph[start]: 
-                if neighbor[0] == end:
-                    current_path.append(end)
-                    #print(f"{tab_str}{current_path} destination trouvée")
-                    res = copy.copy(current_path)
-                    all_paths.append(res)
-                    current_path.remove(start)
-                    current_path.remove(end)
-                else :
-                    #print(f"{tab_str}{current_path} on descend dans les noeuds")
-                    self.reachable(neighbor[0],end,current_path, all_paths)
-            Graph.tab-=1
-            
-        
-            
-
-    def get_path_with_power(self, start, end, power):
-        all_paths =[]
-        current_path=[]
-        self.reachable(start, end, current_path, all_paths)
-        print(all_paths)
-        for path in all_paths:
-            min_power_path = 0
-
-        return all_paths
+    
 
 
             
