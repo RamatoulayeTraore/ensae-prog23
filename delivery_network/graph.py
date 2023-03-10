@@ -183,34 +183,11 @@ class Graph:
     
 
     def min_power(self, start, end):
-        # On utilise un heap (tas) pour stocker les chemins possibles 
-        heap = [(start, [])]
-        visited = set()
-        while heap:
-            (current_node, path) = heapq.heappop(heap)
-            # On ajoute le nœud en cours de traitement à la liste de chemins parcourus
-            visited.add(current_node)
-            # On ajoute le nœud en cours de traitement à la fin du chemin actuel
-            path = path + [current_node]
-            # Si on atteint le nœud de destination, on retourne le chemin et la longueur totale
-            if current_node == end:
-                # On calcule la puissance minimale nécessaire pour couvrir le chemin
-                power_min = float('inf')
-                for i in range(len(path) - 1):
-                    for neighbor in self.graph[path[i]]:
-                        if neighbor[0] == path[i+1]:
-                            print("path,minpower======",path,power_min,neighbor[1])
-                            if neighbor[1] < power_min:
-                                power_min = neighbor[1]
-                return path, power_min
-            # On explore les voisins du nœud en cours de traitement
-            for neighbor in self.graph[current_node]:
-                if neighbor[0] not in visited:
-                    # On ajoute le chemin possible dans le heap
-                    heapq.heappush(heap, ( neighbor[0], path))
-                    print("path======",heapq.heappush(heap, ( neighbor[0], path)))
-        # Si on ne trouve pas de chemin, on retourne None
-        return None, None       
+       p=1
+       while(not self.get_path_with_power(start,end,p)):
+        p+=1
+       path=self.get_path_with_power(start,end,p)
+       return path, p      
 
 
     
