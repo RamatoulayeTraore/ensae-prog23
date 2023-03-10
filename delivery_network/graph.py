@@ -182,7 +182,7 @@ class Graph:
         return None
     
 
-    """ def min_power(self, start, end):
+     def min_power(self, start, end):
         # On utilise un heap (tas) pour stocker les chemins possibles 
         heap = [(start, [])]
         visited = set()
@@ -210,11 +210,48 @@ class Graph:
                     heapq.heappush(heap, ( neighbor[0], path))
                     print("path======",heapq.heappush(heap, ( neighbor[0], path)))
         # Si on ne trouve pas de chemin, on retourne None
-        return None, None """
+        return None, None 
 
     
+tab=0
+    def reachable(self, start ,end) :
+        all_paths =[]
+        current_path=[]
+        tab_str = "===" * Graph.tab    
+        Graph.tab += 1
+        current_path.append(start)
+        for neighbor in self.graph[start]: 
+            if neighbor[0] == end:
+                print(f"{tab_str}{current_path} destination trouvée")
+                res = copy.copy(current_path)
+                res.append(end)
+                all_paths.append(res)
+            elif  neighbor[0] in current_path :
+                pass
+                print(f"{tab_str}{current_path} skip : deja visité")
+            else :
+                print(f"{tab_str}{current_path} on descend dans les noeuds")
+                self.reachable(neighbor[0],end,current_path, all_paths)
+        current_path.remove(start)      
+        Graph.tab-=1
 
 
+def plot_graph(graph, start_node, end_node, path, route):
+    dot = graphviz.Digraph()
+    for node in graph:
+        dot.node(node)
+        for neighbor in graph[node]:
+            dot.edge(node, neighbor, label=str(graph[node][neighbor]))
+    dot.node(start_node, style='filled', fillcolor='lightblue')
+    dot.node(end_node, style='filled', fillcolor='lightblue')
+    dot.node(path[0], style='filled', fillcolor='orange')
+    dot.node(path[-1], style='filled', fillcolor='orange')
+    for i in range(len(path) - 1):
+        dot.edge(path[i], path[i+1], color='orange', penwidth='3')
+    for i in range(len(route) - 1):
+        dot.edge(route[i], route[i+1], color='green', penwidth='3')
+    dot.render('graph', format='png', view=True)
+    
 
 
 
