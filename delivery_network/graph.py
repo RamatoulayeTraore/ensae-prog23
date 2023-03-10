@@ -182,7 +182,7 @@ class Graph:
         return None
     
 
-    """ def min_power(self, start, end):
+    def min_power(self, start, end):
         # On utilise un heap (tas) pour stocker les chemins possibles 
         heap = [(start, [])]
         visited = set()
@@ -210,58 +210,9 @@ class Graph:
                     heapq.heappush(heap, ( neighbor[0], path))
                     print("path======",heapq.heappush(heap, ( neighbor[0], path)))
         # Si on ne trouve pas de chemin, on retourne None
-        return None, None """
-
-    # def reachable(self, start ,end) :
-    #     current_path, all_paths=[],[]    
-    #     if start not in current_path:
-    #         current_path.append(start)
-    #         for neighbor in self.graph[start]: 
-    #             if neighbor[0] == end:
-    #                 current_path.append(end)
-    #                 #print(f"{tab_str}{current_path} destination trouvée")
-    #                 res = copy.copy(current_path)
-    #                 all_paths.append(res)
-    #                 current_path.remove(start)
-    #                 current_path.remove(end)
-    #             else :
-    #                 #print(f"{tab_str}{current_path} on descend dans les noeuds")
-    #                 self.reachable(neighbor[0],end)
-    #     return all_paths
-    
-     def reachable(self, start ,end) :
-        all_paths =[]
-        current_path=[]
-        current_path.append(start)
-        for neighbor in self.graph[start]: 
-            if neighbor[0] == end:
-                res = copy.copy(current_path)
-                res.append(end)
-                all_paths.append(res)
-            elif  neighbor[0] in current_path :
-                pass
-            else :
-                self.reachable(neighbor[0],end)
-        current_path.remove(start)   
-            
-        
-            
-
-    def get_path_with_power(self, start, end, power):
-        all_paths =[]
-        current_path=[]
-        self.reachable(start, end, current_path, all_paths)
-        print(all_paths)
-        for path in all_paths:
-            min_power_path = 0
-
-        return all_paths
+        return None, None       
 
 
-            
-    #il va falloir sommer la distance des arretes entre deux noeuds et la comparer à p 
-    #trajet = couple (v,v') auquel il va falloir associer une distance (et une utilité/profit)
-    #on donne un départ, une arrivée et un puissance max, s'il existe un trajet qui respecte on retourne un chemin, sinon on retourne none
     
 def graph_from_file(filename):
     # import graph from a file
