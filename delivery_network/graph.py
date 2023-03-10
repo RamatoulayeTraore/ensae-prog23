@@ -1,6 +1,7 @@
 
 import heapq
 import copy
+import graphviz
 
 class Graph:
     def __init__(self, nodes=[]):
