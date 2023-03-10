@@ -258,7 +258,7 @@ def graph_from_file_2(filename):
                 tab_edge.append((Lines[i][0],Lines[i][1],Lines[i][2],1))     
      
         return tab_edge
-
+#graph 
 def plot_graph(graph, start_node, end_node, path, route):
     dot = graphviz.Digraph()
     for node in graph:
