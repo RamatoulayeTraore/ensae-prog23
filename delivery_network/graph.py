@@ -212,22 +212,37 @@ class Graph:
         # Si on ne trouve pas de chemin, on retourne None
         return None, None """
 
-    def reachable(self, start ,end) :
-        current_path, all_paths=[],[]    
-        if start not in current_path:
-            current_path.append(start)
-            for neighbor in self.graph[start]: 
-                if neighbor[0] == end:
-                    current_path.append(end)
-                    #print(f"{tab_str}{current_path} destination trouvée")
-                    res = copy.copy(current_path)
-                    all_paths.append(res)
-                    current_path.remove(start)
-                    current_path.remove(end)
-                else :
-                    #print(f"{tab_str}{current_path} on descend dans les noeuds")
-                    self.reachable(neighbor[0],end)
-        return all_paths
+    # def reachable(self, start ,end) :
+    #     current_path, all_paths=[],[]    
+    #     if start not in current_path:
+    #         current_path.append(start)
+    #         for neighbor in self.graph[start]: 
+    #             if neighbor[0] == end:
+    #                 current_path.append(end)
+    #                 #print(f"{tab_str}{current_path} destination trouvée")
+    #                 res = copy.copy(current_path)
+    #                 all_paths.append(res)
+    #                 current_path.remove(start)
+    #                 current_path.remove(end)
+    #             else :
+    #                 #print(f"{tab_str}{current_path} on descend dans les noeuds")
+    #                 self.reachable(neighbor[0],end)
+    #     return all_paths
+    
+     def reachable(self, start ,end) :
+        all_paths =[]
+        current_path=[]
+        current_path.append(start)
+        for neighbor in self.graph[start]: 
+            if neighbor[0] == end:
+                res = copy.copy(current_path)
+                res.append(end)
+                all_paths.append(res)
+            elif  neighbor[0] in current_path :
+                pass
+            else :
+                self.reachable(neighbor[0],end)
+        current_path.remove(start)   
             
         
             
