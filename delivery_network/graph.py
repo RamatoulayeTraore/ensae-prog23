@@ -127,7 +127,7 @@ class Graph:
                      current_power = neighbor[1]
                     # Si la power_edge n'a pas déjà été enregistrée pour ce voisin ou si elle est plus petite que la précédente,
                     # on l'enregistre dans power_edge
-                     if neighbor[0] not in power_edge or current_power < power_edge[neighbor[0]]:
+                     if neighbor[0] not in visited or current_power < power_edge[neighbor[0]]:
                         power_edge[neighbor[0]] = current_power
                         # On continue la recherche à partir de ce voisin
                         dfs(neighbor[0], current_power, path)
