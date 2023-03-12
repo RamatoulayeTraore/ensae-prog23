@@ -214,7 +214,7 @@ def graph_from_file(filename):
      
         return G
 
-def graph_from_file_2(filename):
+def graph_from_route(filename):
         fichier=open(filename)
         lignes=fichier.readlines()
         fichier.close()
@@ -227,14 +227,10 @@ def graph_from_file_2(filename):
             for mot in ligne:
                 mots.append(int(mot))
             Lines.append(mots)
-        tab_edge=[]
-        for i in range(1,Lines[0][1]+1):
-            if len(Lines[i])==4:
-              tab_edge.append((Lines[i][0],Lines[i][1],Lines[i][2],Lines[i][3]))
-            else:
-                tab_edge.append((Lines[i][0],Lines[i][1],Lines[i][2],1))     
-     
-        return tab_edge
+        G=Graph([])
+        for i in range(1,Lines[0][0]+1):
+              G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2])
+        return G
 #graph 
 def plot_graph(graph, start_node, end_node, path, route):
     dot = graphviz.Digraph()
