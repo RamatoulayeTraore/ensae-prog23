@@ -206,9 +206,6 @@ class Graph:
 
         return res        
             
-          
-
-
     
 def graph_from_file(filename):
     # import graph from a file
