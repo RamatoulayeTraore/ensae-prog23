@@ -29,12 +29,12 @@ class Graph:
             n1=True
             self.nodes.append(node1)
             self.nb_nodes +=1
-            self.graph[node1]=[node2,power_min,dist]
+            self.graph[node1]=[[node2,power_min,dist]]
         if (node2 not in self.nodes):
             n2=True
             self.nodes.append(node2)
             self.nb_nodes +=1
-            self.graph[node2]=[node1,power_min,dist]
+            self.graph[node2]=[[node1,power_min,dist]]
            
 
         if n1==False:self.graph[node1].append([node2,power_min,dist])
@@ -102,7 +102,7 @@ class Graph:
         #on prend la liste de liste, chaque éléments devient une frozenset et il fait du tout un set via map
         return set(map(frozenset, self.connected_components()))
     
-    
+
         
     def get_path_with_power(self, start, end, power):
         visited = []
@@ -112,7 +112,6 @@ class Graph:
 
         def dfs(node, current_power, path):
             nonlocal res
-            visited.append(node)
             path.append(node)
             if node == end:
                 # Si on atteint le nœud de destination, on vérifie si la power_edge parcourue est inférieure ou égale à la puissance maximale
@@ -183,11 +182,31 @@ class Graph:
     
 
     def min_power(self, start, end):
-       p=1
-       while(not self.get_path_with_power(start,end,p)):
-        p+=1
-       path=self.get_path_with_power(start,end,p)
-       return path, p      
+       
+        def puissance_max(graph):
+            p=0
+            for node in graph.nodes:
+                for neighbor in graph.graph[node]:
+                    if p<neighbor[1]:
+                       p=neighbor[1]
+            return p
+               
+        max_power = puissance_max(self)
+        low, high = 0, max_power
+        res = None
+
+        while high - low > 1e-6:
+            mid = (low + high) // 2
+            path = self.get_path_with_power(start, end, mid)
+            if path is not None:
+                res = (path, mid)
+                high = mid
+            else:
+                low = mid
+
+        return res        
+            
+          
 
 
     
@@ -205,13 +224,21 @@ def graph_from_file(filename):
             for mot in ligne:
                 mots.append(int(mot))
             Lines.append(mots)
-        G=Graph(range(1,Lines[0][0]+1))
-        for i in range(1,Lines[0][1]+1):
-            if len(Lines[i])==4:
-              G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2],Lines[i][3])  
-            else:
-                G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2])     
-     
+
+        if len(Lines[0])==2:
+            G=Graph(range(1,Lines[0][0]+1))
+            for i in range(1,Lines[0][1]+1):
+                if len(Lines[i])==4:
+                 G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2],Lines[i][3])  
+                else:
+                    G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2]) 
+        else:
+            G=Graph([])
+            for i in range(1,Lines[0][0]+1):
+                if len(Lines[i])==4:
+                    G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2],Lines[i][3])  
+                else:
+                    G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2])            
         return G
 
 def graph_from_route(filename):

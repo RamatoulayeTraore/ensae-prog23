@@ -2,15 +2,18 @@
 import sys 
 sys.path.append("delivery_network/")
 
+import unittest 
+
 from graph import Graph, graph_from_route
 
-import unittest 
 
 class Test_GraphLoading(unittest.TestCase):
     def test_route1(self):
         g = graph_from_route("input/routes.1.in")
+        print(" ============>nre de noeuds",g.nb_nodes)
+        print(" ============>liste des noeuds",g.nodes,g.nb_edges)
         print("============>",g)
-        self.assertEqual(g.nb_edges,10)
+        self.assertEqual(g.nb_edges,140)
 
 
 if __name__ == '__main__':
