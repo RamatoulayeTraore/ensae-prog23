@@ -182,27 +182,25 @@ class Graph:
     
 
     def min_power(self, start, end):
-       
-        def puissance_max(graph):
-            p=0
-            for node in graph.nodes:
-                for neighbor in graph.graph[node]:
-                    if p<neighbor[1]:
-                       p=neighbor[1]
-            return p
-               
-        max_power = puissance_max(self)
+        p=0
+        for node in self.nodes:
+            for neighbor in self.graph[node]:
+                if p<neighbor[1]:
+                   p=neighbor[1]
+                
+                
+        max_power =p
         low, high = 0, max_power
         res = None
 
-        while high - low > 1e-6:
+        while high > low :
             mid = (low + high) // 2
             path = self.get_path_with_power(start, end, mid)
             if path is not None:
                 res = (path, mid)
                 high = mid
             else:
-                low = mid
+                low = mid+1
 
         return res        
             
@@ -219,42 +217,26 @@ def graph_from_file(filename):
         for ligne in Lignes:
             mots=[]
             for mot in ligne:
-                mots.append(int(mot))
+                mots.append(float(mot))
             Lines.append(mots)
 
         if len(Lines[0])==2:
-            G=Graph(range(1,Lines[0][0]+1))
-            for i in range(1,Lines[0][1]+1):
+            G=Graph(range(1,int(Lines[0][0]+1)))
+            for i in range(1,int(Lines[0][1]+1)):
                 if len(Lines[i])==4:
                  G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2],Lines[i][3])  
                 else:
                     G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2]) 
         else:
             G=Graph([])
-            for i in range(1,Lines[0][0]+1):
+            for i in range(1,int(Lines[0][0]+1)):
                 if len(Lines[i])==4:
                     G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2],Lines[i][3])  
                 else:
                     G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2])            
         return G
 
-def graph_from_route(filename):
-        fichier=open(filename)
-        lignes=fichier.readlines()
-        fichier.close()
-        Lignes=[]
-        for ligne in lignes:
-            Lignes.append(ligne.split())
-        Lines=[]
-        for ligne in Lignes:
-            mots=[]
-            for mot in ligne:
-                mots.append(int(mot))
-            Lines.append(mots)
-        G=Graph([])
-        for i in range(1,Lines[0][0]+1):
-              G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2])
-        return G
+
 #graph 
 def plot_graph(graph, start_node, end_node, path, route):
     dot = graphviz.Digraph()

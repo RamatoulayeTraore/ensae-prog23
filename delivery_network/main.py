@@ -18,9 +18,7 @@ print("temps moy",tmps_moy)"""
 ####test_route_10
 g1 = graph_from_file("input/routes.10.in")
 t0 = time.perf_counter()
-g.min_power(60518,17231)
-g.min_power(52008,153170)
-g.min_power(169062,116101)
+g1.min_power(60518,17231)
 t1=time.perf_counter()
 tmps_moy=(t1-t0)/3
 print("temps moy",tmps_moy)
