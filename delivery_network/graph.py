@@ -182,6 +182,10 @@ class Graph:
 
         # Si aucun chemin admissible n'a été trouvé, on retourne None
         return None
+    #la complexité de cette fonction est O((E+V)logV). 
+    #logV est le coût d'insertion et de suppression d'un élément dans un tas binaire
+    #O(V) car dans la boucle whhile ts les noeuds sont visités au maximum une fois
+    #O(V) car
     
     def min_power_arbre(self, start, end):
         # On utilise un heap (tas) pour stocker les chemins possibles 
