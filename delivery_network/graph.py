@@ -1,4 +1,3 @@
-
 import heapq
 import copy
 import graphviz
@@ -30,17 +29,17 @@ class Graph:
             n1=True
             self.nodes.append(node1)
             self.nb_nodes +=1
-            self.graph[node1]=[node2,power_min,dist]
+            self.graph[node1]=[(node2,power_min,dist)]
         if (node2 not in self.nodes):
             n2=True
             self.nodes.append(node2)
             self.nb_nodes +=1
-            self.graph[node2]=[node1,power_min,dist]
+            self.graph[node2]=[(node1,power_min,dist)]
            
 
-        if n1==False:self.graph[node1].append([node2,power_min,dist])
+        if n1==False:self.graph[node1].append((node2,power_min,dist))
         #si le noeud avait déja été creér, on rajoute juste le voisin là en plus, sinon il existait deja via la fonction en haut
-        if n2==False:self.graph[node2].append([node1,power_min,dist])
+        if n2==False:self.graph[node2].append((node1,power_min,dist))
         self.nb_edges +=1
 
         #Donc par exemple, si Node1 existe mais pas node 2, alors n2 sera True et n1 false, et donc on ajouetera node 2 comme voisin de node 1
@@ -103,7 +102,7 @@ class Graph:
         #on prend la liste de liste, chaque éléments devient une frozenset et il fait du tout un set via map
         return set(map(frozenset, self.connected_components()))
     
-    
+
         
     def get_path_with_power(self, start, end, power):
         visited = []
@@ -113,7 +112,6 @@ class Graph:
 
         def dfs(node, current_power, path):
             nonlocal res
-            visited.append(node)
             path.append(node)
             if node == end:
                 # Si on atteint le nœud de destination, on vérifie si la power_edge parcourue est inférieure ou égale à la puissance maximale
@@ -141,6 +139,9 @@ class Graph:
             return res
         else :
             return None
+        
+    ### la complexité de cette fonction est O(E + V) car la boucle for qui parcourt ts les arrêtes donne O(E) 
+    ### et 
 
    
     def get_path_with_power_2(self, start, end, power):
@@ -182,15 +183,61 @@ class Graph:
         # Si aucun chemin admissible n'a été trouvé, on retourne None
         return None
     
+    def min_power_arbre(self, start, end):
+        # On utilise un heap (tas) pour stocker les chemins possibles 
+        heap = [(start, [])]
+        visited = set()
+        while heap:
+            (current_node, path) = heapq.heappop(heap)
+            # On ajoute le nœud en cours de traitement à la liste de chemins parcourus
+            visited.add(current_node)
+            # On ajoute le nœud en cours de traitement à la fin du chemin actuel
+            path = path + [current_node]
+            # Si on atteint le nœud de destination, on retourne le chemin et la longueur totale
+            if current_node == end:
+                # On calcule la puissance minimale nécessaire pour couvrir le chemin
+                power_min = float(0)
+                for i in range(len(path) - 1):
+                    for neighbor in self.graph[path[i]]:
+                        if neighbor[0] == path[i+1]:
+                            print("path,minpower======",path,power_min,neighbor[1])
+                            if neighbor[1] >= power_min:
+                                power_min = neighbor[1]
+                return path, power_min
+            # On explore les voisins du nœud en cours de traitement
+            for neighbor in self.graph[current_node]:
+                if neighbor[0] not in visited:
+                    # On ajoute le chemin possible dans le heap
+                    heapq.heappush(heap, ( neighbor[0], path))
+                    print("path======",heapq.heappush(heap, ( neighbor[0], path)))
+        # Si on ne trouve pas de chemin, on retourne None
+        return None, None
+
+
 
     def min_power(self, start, end):
-       p=1
-       while(not self.get_path_with_power(start,end,p)):
-        p+=1
-       path=self.get_path_with_power(start,end,p)
-       return path, p      
+        p=0
+        for node in self.nodes:
+            for neighbor in self.graph[node]:
+                if p<neighbor[1]:
+                   p=neighbor[1]
+                
+                
+        max_power =p
+        low, high = 0, max_power
+        res = None
 
+        while high > low :
+            mid = (low + high) // 2
+            path = self.get_path_with_power(start, end, mid)
+            if path is not None:
+                res = (path, mid)
+                high = mid
+            else:
+                low = mid+1
 
+        return res        
+            
     
 def graph_from_file(filename):
     # import graph from a file
@@ -206,36 +253,50 @@ def graph_from_file(filename):
             for mot in ligne:
                 mots.append(int(mot))
             Lines.append(mots)
-        G=Graph(range(1,Lines[0][0]+1))
-        for i in range(1,Lines[0][1]+1):
-            if len(Lines[i])==4:
-              G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2],Lines[i][3])  
-            else:
-                G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2])     
-     
+
+        if len(Lines[0])==2:
+            G=Graph(range(1,Lines[0][0]+1))
+            for i in range(1,Lines[0][1]+1):
+                if len(Lines[i])==4:
+                   G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2],Lines[i][3])  
+                else:
+                    G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2]) 
+        else:
+            G=Graph([])
+            for i in range(1,Lines[0][0]+1):
+               # if i==11:break
+                if len(Lines[i])==4:
+                    G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2],Lines[i][3])  
+                else:
+                    G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2])            
         return G
 
-def graph_from_file_2(filename):
-        fichier=open(filename)
-        lignes=fichier.readlines()
-        fichier.close()
-        Lignes=[]
-        for ligne in lignes:
-            Lignes.append(ligne.split())
-        Lines=[]
-        for ligne in Lignes:
-            mots=[]
-            for mot in ligne:
-                mots.append(int(mot))
-            Lines.append(mots)
-        tab_edge=[]
-        for i in range(1,Lines[0][1]+1):
-            if len(Lines[i])==4:
-              tab_edge.append((Lines[i][0],Lines[i][1],Lines[i][2],Lines[i][3]))
-            else:
-                tab_edge.append((Lines[i][0],Lines[i][1],Lines[i][2],1))     
-     
-        return tab_edge
+""" def graph_from_file(filename):
+    # import graph from a file
+    fichier = open(filename)
+    lignes = fichier.readlines()
+    fichier.close()
+    Lignes = []
+    for ligne in lignes:
+        Lignes.append(ligne.split())
+    Lines = []
+    for ligne in Lignes:
+        mots = []
+        for mot in ligne:
+            mots.append(int(mot))
+        Lines.append(mots)
+
+    G = Graph(range(1, Lines[0][0] + 1))
+    for i in range(1, Lines[0][1] + 1):
+        if len(Lines[i]) == 4:
+            G.add_edge(Lines[i][0], Lines[i][1], Lines[i][2], Lines[i][3])
+        else:
+            G.add_edge(Lines[i][0], Lines[i][1], Lines[i][2])
+
+    return G """
+
+
+
 #graph 
 def plot_graph(graph, start_node, end_node, path, route):
     dot = graphviz.Digraph()
@@ -253,3 +314,67 @@ def plot_graph(graph, start_node, end_node, path, route):
         dot.edge(route[i], route[i+1], color='green', penwidth='3')
     dot.render('graph', format='png', view=True)
     
+
+
+def kruskal(graph):
+    # Créer une structure de données ensemble-disjoint pour suivre les composantes connexes
+    # du graphe. Chaque noeud commence dans son propre ensemble.
+    disjoint_set = {node: {node} for node in graph.nodes}
+
+    # Créer une liste d'arêtes triées par poids (distance) dans l'ordre non décroissant.
+    edge = []
+    for source, neighbors in graph.graph.items():
+        for dest, power_min, _ in neighbors:
+            edge.append((source, dest, power_min))
+    edges = sorted(edge, key=lambda x:x[2])
+
+    # Parcourir la liste triée d'arêtes et ajouter celles qui connectent différentes
+    # composantes jusqu'à ce qu'il ne reste plus qu'une seule composante connexe.
+    k = 0
+    result = Graph()
+    while k < graph.nb_nodes - 1 and edges:
+        source, dest , weight = edges.pop(0)
+        if disjoint_set[source] != disjoint_set[dest]:
+            # Ajouter l'arête au graphe résultat et fusionner les ensembles contenant
+            # les noeuds source et destination.
+            result.add_edge(source, dest, weight)
+            disjoint_set[source].update(disjoint_set[dest])
+            for node in disjoint_set[dest]:
+                disjoint_set[node] = disjoint_set[source]
+            k += 1
+
+    if k < graph.nb_nodes - 1:
+        # Si le graphe n'est pas connexe, lever une exception.
+        raise ValueError("Le graphe n'est pas connexe")
+    else:
+        result.nodes.sort()# permet de trier la list des noeux
+        r= result.nodes
+        gr = Graph(r)
+        for item in r:
+            gr.graph[item] = result.graph[item]
+        gr.nb_edges = result.nb_edges
+    return gr
+
+
+
+""" Il semble que l'exécution de la fonction graph_from_file a été interrompue à cause d'une erreur.
+L'erreur se produit lorsque la fonction essaie d'ajouter une arête au graphe en utilisant la méthode add_edge() de la classe Graph. 
+Il est difficile de déterminer la cause exacte de cette erreur sans plus d'informations, mais il est possible que cela soit dû à une erreur 
+de syntaxe dans le fichier d'entrée ou à une erreur de mémoire en raison d'un grand nombre de nœuds ou d'arêtes
+. Il est recommandé de vérifier le format du fichier d'entrée et de s'assurer qu'il est correctement structuré.
+Il peut également être utile de tester la fonction avec un fichier d'entrée plus petit pour déterminer si la
+taille du graphe est un facteur contribuant à l'erreur. """
+
+""" La complexité de la solution précédente est la suivante:
+
+Construction de l'arbre couvrant minimum : O(E log V), où E est le nombre d'arêtes et V est le nombre de sommets dans le graphe.
+
+Recherche du chemin entre les sommets de départ et d'arrivée dans l'arbre couvrant : O(E log V) (en utilisant une file de priorité).
+
+Calcul de la puissance minimale : O(T), où T est le nombre de trajets.
+
+Ainsi, la complexité totale est O((E+T) log V).
+
+En pratique, le temps d'exécution dépendra des données spécifiques, mais il est probable que la solution sera plus rapide que la première version du code car elle ne nécessite pas de calculer la liste des trajets à l'avance. De plus, l'utilisation d'un dictionnaire pour stocker les puissances minimales pour chaque trajet permettra une recherche efficace des valeurs nécessaires pour chaque chemin.
+
+Cependant, le temps d'exécution sera toujours proportionnel au nombre d'arêtes et de trajets dans le graphe, donc la complexité totale reste la même en termes de pire cas."""
