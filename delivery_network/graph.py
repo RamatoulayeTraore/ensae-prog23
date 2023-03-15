@@ -282,48 +282,7 @@ def graph_from_file(filename):
                     G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2])            
         return G
 
-""" def graph_from_file(filename):
-    # import graph from a file
-    fichier = open(filename)
-    lignes = fichier.readlines()
-    fichier.close()
-    Lignes = []
-    for ligne in lignes:
-        Lignes.append(ligne.split())
-    Lines = []
-    for ligne in Lignes:
-        mots = []
-        for mot in ligne:
-            mots.append(int(mot))
-        Lines.append(mots)
 
-    G = Graph(range(1, Lines[0][0] + 1))
-    for i in range(1, Lines[0][1] + 1):
-        if len(Lines[i]) == 4:
-            G.add_edge(Lines[i][0], Lines[i][1], Lines[i][2], Lines[i][3])
-        else:
-            G.add_edge(Lines[i][0], Lines[i][1], Lines[i][2])
-
-    return G """
-
-
-
-#graph 
-def plot_graph(graph, start_node, end_node, path, route):
-    dot = graphviz.Digraph()
-    for node in graph:
-        dot.node(node)
-        for neighbor in graph[node]:
-            dot.edge(node, neighbor, label=str(graph[node][neighbor]))
-    dot.node(start_node, style='filled', fillcolor='lightblue')
-    dot.node(end_node, style='filled', fillcolor='lightblue')
-    dot.node(path[0], style='filled', fillcolor='orange')
-    dot.node(path[-1], style='filled', fillcolor='orange')
-    for i in range(len(path) - 1):
-        dot.edge(path[i], path[i+1], color='orange', penwidth='3')
-    for i in range(len(route) - 1):
-        dot.edge(route[i], route[i+1], color='green', penwidth='3')
-    dot.render('graph', format='png', view=True)
     
 
 
@@ -368,24 +327,3 @@ def kruskal(graph):
 
 
 
-""" Il semble que l'exécution de la fonction graph_from_file a été interrompue à cause d'une erreur.
-L'erreur se produit lorsque la fonction essaie d'ajouter une arête au graphe en utilisant la méthode add_edge() de la classe Graph. 
-Il est difficile de déterminer la cause exacte de cette erreur sans plus d'informations, mais il est possible que cela soit dû à une erreur 
-de syntaxe dans le fichier d'entrée ou à une erreur de mémoire en raison d'un grand nombre de nœuds ou d'arêtes
-. Il est recommandé de vérifier le format du fichier d'entrée et de s'assurer qu'il est correctement structuré.
-Il peut également être utile de tester la fonction avec un fichier d'entrée plus petit pour déterminer si la
-taille du graphe est un facteur contribuant à l'erreur. """
-
-""" La complexité de la solution précédente est la suivante:
-
-Construction de l'arbre couvrant minimum : O(E log V), où E est le nombre d'arêtes et V est le nombre de sommets dans le graphe.
-
-Recherche du chemin entre les sommets de départ et d'arrivée dans l'arbre couvrant : O(E log V) (en utilisant une file de priorité).
-
-Calcul de la puissance minimale : O(T), où T est le nombre de trajets.
-
-Ainsi, la complexité totale est O((E+T) log V).
-
-En pratique, le temps d'exécution dépendra des données spécifiques, mais il est probable que la solution sera plus rapide que la première version du code car elle ne nécessite pas de calculer la liste des trajets à l'avance. De plus, l'utilisation d'un dictionnaire pour stocker les puissances minimales pour chaque trajet permettra une recherche efficace des valeurs nécessaires pour chaque chemin.
-
-Cependant, le temps d'exécution sera toujours proportionnel au nombre d'arêtes et de trajets dans le graphe, donc la complexité totale reste la même en termes de pire cas."""
