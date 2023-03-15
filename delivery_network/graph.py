@@ -218,6 +218,13 @@ class Graph:
         return None, None
 
 
+    ''' La complexité de get_path_with_power() est de O(log(V+E)), donc la complexité de la 
+    fonction min_power() sera de O((V+E)*log(V+E)*log P), où P est la plage de puissance des chemins dans le graphe.
+
+    La boucle for qui initialise la variable p est en O(V*E), car elle parcourt tous les nœuds et toutes les arêtes du graphe
+    Le bloc while effectue une recherche dichotomiqe, qui nécessite O(log P) itérations, où P est la plage de puissance des chemins dans le graphe
+    Dans chaque itération de la boucle while, nous appelons la fonction get_path_with_power() qui a une complexité de O(log(V+E)). 
+    '''
 
     def min_power(self, start, end):
         p=0
