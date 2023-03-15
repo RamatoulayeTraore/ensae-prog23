@@ -139,6 +139,9 @@ class Graph:
             return res
         else :
             return None
+        
+    ### la complexité de cette fonction est O(E + V) car la boucle for qui parcourt ts les arrêtes donne O(E) 
+    ### et 
 
    
     def get_path_with_power_2(self, start, end, power):
@@ -236,7 +239,7 @@ class Graph:
         return res        
             
     
-""" def graph_from_file(filename):
+def graph_from_file(filename):
     # import graph from a file
         fichier=open(filename)
         lignes=fichier.readlines()
@@ -251,7 +254,7 @@ class Graph:
                 mots.append(int(mot))
             Lines.append(mots)
 
-        #if len(Lines[0])==2:
+        if len(Lines[0])==2:
             G=Graph(range(1,Lines[0][0]+1))
             for i in range(1,Lines[0][1]+1):
                 if len(Lines[i])==4:
@@ -261,13 +264,14 @@ class Graph:
         else:
             G=Graph([])
             for i in range(1,Lines[0][0]+1):
+               # if i==11:break
                 if len(Lines[i])==4:
                     G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2],Lines[i][3])  
                 else:
                     G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2])            
         return G
- """
-def graph_from_file(filename):
+
+""" def graph_from_file(filename):
     # import graph from a file
     fichier = open(filename)
     lignes = fichier.readlines()
@@ -289,7 +293,7 @@ def graph_from_file(filename):
         else:
             G.add_edge(Lines[i][0], Lines[i][1], Lines[i][2])
 
-    return G
+    return G """
 
 
 
