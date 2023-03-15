@@ -141,7 +141,7 @@ class Graph:
             return None
         
     ### la complexité de cette fonction est O(E) car la boucle for qui parcourt ts les arrêtes donne O(E) 
-    ### et la copie de path dans res donne O(V). D'ouù le résultat.
+    ### et la copie de path dans res donne O(V).
 
    
     def get_path_with_power_2(self, start, end, power):
