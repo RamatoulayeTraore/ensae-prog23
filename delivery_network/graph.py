@@ -264,22 +264,12 @@ def graph_from_file(filename):
             for mot in ligne:
                 mots.append(int(mot))
             Lines.append(mots)
-
-        if len(Lines[0])==2:
             G=Graph(range(1,Lines[0][0]+1))
             for i in range(1,Lines[0][1]+1):
                 if len(Lines[i])==4:
                    G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2],Lines[i][3])  
                 else:
-                    G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2]) 
-        else:
-            G=Graph([])
-            for i in range(1,Lines[0][0]+1):
-               # if i==11:break
-                if len(Lines[i])==4:
-                    G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2],Lines[i][3])  
-                else:
-                    G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2])            
+                    G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2])          
         return G
 
 
