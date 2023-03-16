@@ -316,4 +316,22 @@ def kruskal(graph):
     return gr
 
 
+def list_from_route(filename):
+    fichier=open(filename)
+    lignes=fichier.readlines()
+    fichier.close()
+    Lignes=[]
+    for ligne in lignes:
+        Lignes.append(ligne.split())
+    Lines=[]
+    for ligne in Lignes:
+        mots=[]
+        for mot in ligne:
+            mots.append(int(mot))
+        Lines.append(mots)
 
+    l=[]
+    for i in range(1,Lines[0][0]+1):
+        l.append(Lines[i][0],Lines[i][1])  
+    return l
+    
