@@ -238,6 +238,9 @@ class Graph:
         low, high = 0, max_power
         res = None
 
+        #Recherhce dichotomique :
+        #On prend la puissance moy et on applique get_path_power
+        #si le camion peut traverser on remplace high par mid et on boucle
         while high > low :
             mid = (low + high) // 2
             path = self.get_path_with_power(start, end, mid)
