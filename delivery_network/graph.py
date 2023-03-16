@@ -108,6 +108,7 @@ class Graph:
         res = []
         # On stocke la puissance  pour chaque arrête  visitée
         power_edge = {start: 0}
+        #on creer un dico dont la key est le noeud courant et la valeur correspond à la valeur entre le noeud courant et le précédent
 
         def dfs(node, current_power, path):
             nonlocal res
@@ -120,9 +121,11 @@ class Graph:
                 # On ne retourne rien pour continuer la recherche de chemins possibles
             
             elif current_power <= power:
+                #si la puissance de l'edge est bien inf à  celle du camion, on poursuit
                 for neighbor in self.graph[node]:
                      # On calcule la power_edge de l'arrête en cours 
                      current_power = neighbor[1]
+                     #on met a jour curent_power avec le power du noeud actuel
                     # Si la power_edge n'a pas déjà été enregistrée pour ce voisin ou si elle est plus petite que la précédente,
                     # on l'enregistre dans power_edge
                      if neighbor[0] not in power_edge or current_power < power_edge[neighbor[0]]:
@@ -224,14 +227,14 @@ class Graph:
     '''
 
     def min_power(self, start, end):
-        p=0
+        max_power =0
+        #on cherche la puissance maximale dans le graphe
         for node in self.nodes:
             for neighbor in self.graph[node]:
-                if p<neighbor[1]:
-                   p=neighbor[1]
+                if max_power <neighbor[1]:
+                   max_power =neighbor[1]
                 
                 
-        max_power =p
         low, high = 0, max_power
         res = None
 
