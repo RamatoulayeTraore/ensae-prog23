@@ -204,7 +204,6 @@ class Graph:
                 for i in range(len(path) - 1):
                     for neighbor in self.graph[path[i]]:
                         if neighbor[0] == path[i+1]:
-                            print("path,minpower======",path,power_min,neighbor[1])
                             if neighbor[1] >= power_min:
                                 power_min = neighbor[1]
                 return path, power_min
@@ -213,7 +212,6 @@ class Graph:
                 if neighbor[0] not in visited:
                     # On ajoute le chemin possible dans le heap
                     heapq.heappush(heap, ( neighbor[0], path))
-                    print("path======",heapq.heappush(heap, ( neighbor[0], path)))
         # Si on ne trouve pas de chemin, on retourne None
         return None, None
 
@@ -252,25 +250,27 @@ class Graph:
     
 def graph_from_file(filename):
     # import graph from a file
-        fichier=open(filename)
-        lignes=fichier.readlines()
-        fichier.close()
-        Lignes=[]
-        for ligne in lignes:
-            Lignes.append(ligne.split())
-        Lines=[]
-        for ligne in Lignes:
-            mots=[]
-            for mot in ligne:
-                mots.append(int(mot))
-            Lines.append(mots)
-            G=Graph(range(1,Lines[0][0]+1))
-            for i in range(1,Lines[0][1]+1):
-                if len(Lines[i])==4:
-                   G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2],Lines[i][3])  
-                else:
-                    G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2])          
-        return G
+    fichier = open(filename)
+    lignes = fichier.readlines()
+    fichier.close()
+    Lignes = []
+    for ligne in lignes:
+        Lignes.append(ligne.split())
+    Lines = []
+    for ligne in Lignes:
+        mots = []
+        for mot in ligne:
+            mots.append(int(mot))
+        Lines.append(mots)
+
+    G = Graph(range(1, Lines[0][0] + 1))
+    for i in range(1, Lines[0][1] + 1):
+        if len(Lines[i]) == 4:
+            G.add_edge(Lines[i][0], Lines[i][1], Lines[i][2], Lines[i][3])
+        else:
+            G.add_edge(Lines[i][0], Lines[i][1], Lines[i][2])
+
+    return G
 
 
     
@@ -332,6 +332,22 @@ def list_from_route(filename):
 
     l=[]
     for i in range(1,Lines[0][0]+1):
-        l.append(Lines[i][0],Lines[i][1])  
+        l.append((Lines[i][0],Lines[i][1]))
     return l
+
+def create_output_file(network_file_name,route_file_name):
+    # On lit le fichier  network dcorrspondant et on crée l'arbre correspondant
+    G =  graph_from_file(network_file_name)
+    Arbre=kruskal(G)
+    #on crée la liste des chemins
+    l=list_from_route(route_file_name)
+    # On ouvre le fichier de sortie en mode écriture
+    output_file_name = route_file_name.replace('.in', '.out')
+    with open(output_file_name, 'w') as output_file:
+        # On écrit la puissance minimale nécessaire pour couvrir chaque trajet dans le fichier de sortie
+        for way in l:
+            start,end=way[0],way[1]
+            power_min_final =Arbre.min_power_arbre(start,end)[1]
+            output_file.write(str(power_min_final) +'\n') # pour afficher les poids seulement
+            
     
