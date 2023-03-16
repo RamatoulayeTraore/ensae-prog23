@@ -105,7 +105,6 @@ class Graph:
 
         
     def get_path_with_power(self, start, end, power):
-        visited = []
         res = []
         # On stocke la puissance  pour chaque arrête  visitée
         power_edge = {start: 0}
@@ -281,7 +280,7 @@ def kruskal(graph):
     # du graphe. Chaque noeud commence dans son propre ensemble.
     disjoint_set = {node: {node} for node in graph.nodes}
 
-    # Créer une liste d'arêtes triées par poids (distance) dans l'ordre non décroissant.
+    # Créer une liste d'arêtes triées par poids (distance) dans l'ordre croissant.
     edge = []
     for source, neighbors in graph.graph.items():
         for dest, power_min, _ in neighbors:
