@@ -102,8 +102,10 @@ class Graph:
         #on prend la liste de liste, chaque éléments devient une frozenset et il fait du tout un set via map
         return set(map(frozenset, self.connected_components()))
     
-
-        
+    """get_path_with_power prend en entrée une puissance de camion
+    power et deux noeuds start et end, et qui décide si un camion de puissance p peut couvrir le trajet t entre les deux noeuds.
+    Rend none si le camion ne peut pas couvir un tel trajet"""
+    
     def get_path_with_power(self, start, end, power):
         res = []
         # On stocke la puissance  pour chaque arrête  visitée
