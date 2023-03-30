@@ -1,5 +1,5 @@
 import time
-from graph import Graph,graph_from_file
+from graph import Graph,graph_from_file,kruskal
 
 
 data_path = "input/"
@@ -30,3 +30,7 @@ print("temps moy2",tmps_moy2)
 """ g=Graph([])
     g.add_edge("Paris", "Palaiseau", 4, 20)
     print(g) """
+to=time.perf_counter()
+r=kruskal("input/network.1.in")
+t1=time.perf_counter()
+print("temps",t1-to)
