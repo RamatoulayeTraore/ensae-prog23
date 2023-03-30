@@ -286,7 +286,7 @@ def graph_from_file(filename):
 def kruskal(graph):
     # Créer une structure de données ensemble-disjoint pour suivre les composantes connexes
     # du graphe. Chaque noeud commence dans son propre ensemble.
-    disjoint_set = {node: {node} for node in graph.graph.nodes}
+    disjoint_set = {node: {node} for node in graph.nodes}
 
     # Créer une liste d'arêtes triées par poids (distance) dans l'ordre croissant.
     edge = []
