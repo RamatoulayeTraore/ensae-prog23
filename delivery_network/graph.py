@@ -355,6 +355,6 @@ def create_output_file(network_file_name,route_file_name):
         for way in l:
             start,end=way[0],way[1]
             power_min_final =Arbre.min_power_arbre(start,end)[1]
-            output_file.write(str(power_min_final) +'\n') # pour afficher les poids seulement
+            output_file.write(str(power_min_final) +'\n') # pour afficher les poids seulemen
             
     
