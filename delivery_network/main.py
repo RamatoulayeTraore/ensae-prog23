@@ -38,7 +38,7 @@ print("temps moy2",tmps_moy2)
 #temps_total=0
 
 to=time.perf_counter()
-r=kruskal("input/network.2.in")
+r=kruskal("input/network.1.in")
 t1=time.perf_counter()
 print("temps",t1-to)
 
