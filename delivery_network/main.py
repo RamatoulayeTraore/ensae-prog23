@@ -7,8 +7,8 @@ file_name = "network.01.in"
 
 """ g=graph_from_file("input/network.5.in")
 print(g) """
-g = graph_from_file("input/routes.1.in")
-print(g)
+#g = graph_from_file("input/routes.1.in")
+#print(g)
 ####test_route_7
 """ t0 = time.perf_counter()
 g.min_power(4,12)
