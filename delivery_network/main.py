@@ -33,6 +33,7 @@ print("temps moy2",tmps_moy2)
     g.add_edge("Paris", "Palaiseau", 4, 20)
     print(g) """
 to=time.perf_counter()
+
 r=kruskal_bis(g)
 t1=time.perf_counter()
 print("temps",t1-to)

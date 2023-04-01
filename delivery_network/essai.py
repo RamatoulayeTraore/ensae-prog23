@@ -104,12 +104,13 @@ def quicksort(lst):
 
 
 def kruskal_bis(G):
+    uf = UnionFind(G.nb_nodes)
+    print("uf",uf)
     edge = []
     for source, neighbors in G.items():
         for dest, power_min, _ in neighbors:
             edge.append((source, dest, power_min))
     edges=quicksort(edge)
-    uf = UnionFind(G.nb_nodes)
     mst = []
     for (source, dest, power_min) in edges:
         if uf.find(source) != uf.find(dest):
