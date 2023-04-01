@@ -316,7 +316,7 @@ def plot_graph(graph, start_node, end_node, path, route):
     
 
 
-def kruskal(graph):
+""" def kruskal(graph):
     # Créer une structure de données ensemble-disjoint pour suivre les composantes connexes
     # du graphe. Chaque noeud commence dans son propre ensemble.
     disjoint_set = {node: {node} for node in graph.nodes}
@@ -353,7 +353,7 @@ def kruskal(graph):
         for item in r:
             gr.graph[item] = result.graph[item]
         gr.nb_edges = result.nb_edges
-    return gr
+    return gr """
 
 
 

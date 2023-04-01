@@ -1,4 +1,4 @@
-class UF : 
+""" class UF : 
     def __init__(self,x):
         self.poids=0
         self.element=x 
@@ -48,11 +48,11 @@ def ACM_kruskal(G):
             print ('choix de '+str((x,d,y))) 
             UF.UF.Union(Part[x],Part[y])
             Res.append((x,d,y)) 
-    return Res 
+    return Res  """
 
 
 
-########################################################################"
+########################################################################
 # from typing import List, Tuple
 
 class UnionFind:
@@ -75,6 +75,7 @@ class UnionFind:
             else:
                 self.parent[py] = px
                 self.rank[px] += 1
+                
 def quicksort(lst):
     # Si la liste est vide ou ne contient qu'un élément, elle est considérée comme triée
     if len(lst) <= 1:
