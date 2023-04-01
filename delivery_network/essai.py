@@ -103,7 +103,7 @@ def quicksort(lst):
     return quicksort(less) + equal + quicksort(greater)
 
 
-def kruskal(G):
+def kruskal_bis(G):
     edge = []
     for source, neighbors in G.items():
         for dest, power_min, _ in neighbors:
@@ -115,4 +115,5 @@ def kruskal(G):
         if uf.find(source) != uf.find(dest):
             uf.union(source, dest)
             mst.append((source, dest))
+    print("======================<<<<<<<<<<<<<<",mst)
     return mst
