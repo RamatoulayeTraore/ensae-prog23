@@ -1,6 +1,6 @@
 import time
-from graph import Graph,graph_from_file
-from essai import UF,ACM_kruskal
+from graph import Graph,graph_from_file,UF,kruskal
+#from essai import 
 
 
 
@@ -32,7 +32,7 @@ print("temps moy2",tmps_moy2)
     g.add_edge("Paris", "Palaiseau", 4, 20)
     print(g) """
 #to=time.perf_counter()
-r=ACM_kruskal(g)
+r=kruskal(g)
 print("le resultat est ====================<<<<<<<<",type(r))
 print("le resultat est ====================<<<<<<<<",r)
 print(r.nodes)
