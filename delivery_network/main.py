@@ -1,6 +1,6 @@
 import time
 from graph import Graph,graph_from_file,UF,kruskal
-#from essai import 
+from essai import create_output_file
 
 
 
@@ -9,7 +9,7 @@ file_name = "network.01.in"
 
 """ g=graph_from_file("input/network.5.in")
 print(g) """
-g = graph_from_file("input/network.2.in")
+#g = graph_from_file("input/network.2.in")
 ####test_route_7
 """ t0 = time.perf_counter()
 g.min_power(4,12)
@@ -32,9 +32,10 @@ print("temps moy2",tmps_moy2)
     g.add_edge("Paris", "Palaiseau", 4, 20)
     print(g) """
 #to=time.perf_counter()
-r=kruskal(g)
-print("le resultat est ====================<<<<<<<<",type(r))
-print("le resultat est ====================<<<<<<<<",r)
-print(r.nodes)
+#r=kruskal(g)
+#print("le resultat est ====================<<<<<<<<",type(r))
+#print("le resultat est ====================<<<<<<<<",r)
+#print(g)
 #t1=time.perf_counter()
 #print("temps",t1-to)
+create_output_file("input/network.2.in","input/routes.2.in")
