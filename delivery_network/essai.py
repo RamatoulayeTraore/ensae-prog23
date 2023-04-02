@@ -1,4 +1,4 @@
-from graph import Graph
+from graph import Graph,graph_from_file,
 class UF : 
     def __init__(self,x):
         self.poids=0
@@ -82,6 +82,21 @@ def quicksort(lst):
     # Récursion de la fonction sur les listes less et greater, puis concaténation des trois listes (dans l'ordre : less, equal, greater)
     return quicksort(less) + equal + quicksort(greater)
 
+
+def create_output_file(network_file_name,route_file_name):
+    # On lit le fichier  network dcorrspondant et on crée l'arbre correspondant
+    G =  graph_from_file(network_file_name)
+    Arbre=ACM_kruskal(G)
+    #on crée la liste des chemins
+    l=list_from_route(route_file_name)
+    # On ouvre le fichier de sortie en mode écriture
+    output_file_name = route_file_name.replace('.in', '.out')
+    with open(output_file_name, 'w') as output_file:
+        # On écrit la puissance minimale nécessaire pour couvrir chaque trajet dans le fichier de sortie
+        for way in l:
+            start,end=way[0],way[1]
+            power_min_final =Arbre.min_power_arbre(start,end)[1]
+            output_file.write(str(power_min_final) +'\n') # pour afficher les poids seulemen
 
 ########################################################################
 # from typing import List, Tuple
