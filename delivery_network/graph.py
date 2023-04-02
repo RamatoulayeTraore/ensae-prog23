@@ -239,39 +239,9 @@ class Graph:
         return res        
             
     
+
+
 def graph_from_file(filename):
-    # import graph from a file
-        fichier=open(filename)
-        lignes=fichier.readlines()
-        fichier.close()
-        Lignes=[]
-        for ligne in lignes:
-            Lignes.append(ligne.split())
-        Lines=[]
-        for ligne in Lignes:
-            mots=[]
-            for mot in ligne:
-                mots.append(int(mot))
-            Lines.append(mots)
-
-        if len(Lines[0])==2:
-            G=Graph(range(1,Lines[0][0]+1))
-            for i in range(1,Lines[0][1]+1):
-                if len(Lines[i])==4:
-                   G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2],Lines[i][3])  
-                else:
-                    G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2]) 
-        else:
-            G=Graph([])
-            for i in range(1,Lines[0][0]+1):
-               # if i==11:break
-                if len(Lines[i])==4:
-                    G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2],Lines[i][3])  
-                else:
-                    G.add_edge(Lines[i][0],Lines[i][1],Lines[i][2])            
-        return G
-
-""" def graph_from_file(filename):
     # import graph from a file
     fichier = open(filename)
     lignes = fichier.readlines()
@@ -293,8 +263,26 @@ def graph_from_file(filename):
         else:
             G.add_edge(Lines[i][0], Lines[i][1], Lines[i][2])
 
-    return G """
+    return G
 
+def list_from_route(filename):
+    fichier=open(filename)
+    lignes=fichier.readlines()
+    fichier.close()
+    Lignes=[]
+    for ligne in lignes:
+        Lignes.append(ligne.split())
+    Lines=[]
+    for ligne in Lignes:
+        mots=[]
+        for mot in ligne:
+            mots.append(int(mot))
+        Lines.append(mots)
+
+    l=[]
+    for i in range(1,Lines[0][0]+1):
+        l.append((Lines[i][0],Lines[i][1]))
+    return l
 
 
 #graph 
@@ -313,68 +301,88 @@ def plot_graph(graph, start_node, end_node, path, route):
     for i in range(len(route) - 1):
         dot.edge(route[i], route[i+1], color='green', penwidth='3')
     dot.render('graph', format='png', view=True)
+
+class UF : 
+    def __init__(self,x):
+        self.poids=0
+        self.element=x 
+        self.parent=self 
+    def Find(self) : 
+        if self.EstRacine() :
+            return self 
+        else : 
+            self. parent=(self. parent ).Find()
+        return self.parent 
+    
+    @staticmethod
+
+    def Link(s1, s2): 
+        if s1.poids > s2.poids : 
+            s2.parent = s1.parent
+        else : 
+            s1. parent=s2
+            if s1. poids==s2.poids : 
+                s2.poids +=1
+
+    @staticmethod 
+    def Union(s1, s2) :
+        r1=s1.Find()
+        r2=s2.Find() 
+        UF.Link(r1, r2) 
+
+    @staticmethod 
+    def Test(sl, s2) : 
+        return sl.Find()==s2.Find() 
+    def EstRacine(self) : 
+        return (self. parent == self)
     
 
 
-""" def kruskal(graph):
-    # Créer une structure de données ensemble-disjoint pour suivre les composantes connexes
-    # du graphe. Chaque noeud commence dans son propre ensemble.
-    disjoint_set = {node: {node} for node in graph.nodes}
+def kruskal(G):
+    Pred,Res, Part, Larete= {},Graph(),{},[]
+    for x in G.nodes:
+        Pred[x]=None
+        Part[x]=UF(x)
+        for neighbor in G.graph[x] : 
+            y,d= neighbor[0],neighbor[1]
+            if (((x,y,d) not in Larete) and ((y,x,d) not in Larete)):
+                Larete.append((x,y,d)) 
+    Laretes= quicksort(Larete)
+    for (x,y,d) in Laretes:
+        if not UF.Test(Part[x],Part[y]): 
+            UF.Union(Part[x],Part[y])
+            Res.add_edge(x,y,d) 
+    Res.nodes.sort()
+    r= Res.nodes
+    gr = Graph(r)
+    for item in r:
+        gr.graph[item] = Res.graph[item]
+        gr.nb_edges = Res.nb_edges
+    return gr 
 
-    # Créer une liste d'arêtes triées par poids (distance) dans l'ordre non décroissant.
-    edge = []
-    for source, neighbors in graph.graph.items():
-        for dest, power_min, _ in neighbors:
-            edge.append((source, dest, power_min))
-    edges = sorted(edge, key=lambda x:x[2])
-
-    # Parcourir la liste triée d'arêtes et ajouter celles qui connectent différentes
-    # composantes jusqu'à ce qu'il ne reste plus qu'une seule composante connexe.
-    k = 0
-    result = Graph()
-    while k < graph.nb_nodes - 1 and edges:
-        source, dest , weight = edges.pop(0)
-        if disjoint_set[source] != disjoint_set[dest]:
-            # Ajouter l'arête au graphe résultat et fusionner les ensembles contenant
-            # les noeuds source et destination.
-            result.add_edge(source, dest, weight)
-            disjoint_set[source].update(disjoint_set[dest])
-            for node in disjoint_set[dest]:
-                disjoint_set[node] = disjoint_set[source]
-            k += 1
-
-    if k < graph.nb_nodes - 1:
-        # Si le graphe n'est pas connexe, lever une exception.
-        raise ValueError("Le graphe n'est pas connexe")
-    else:
-        result.nodes.sort()# permet de trier la list des noeux
-        r= result.nodes
-        gr = Graph(r)
-        for item in r:
-            gr.graph[item] = result.graph[item]
-        gr.nb_edges = result.nb_edges
-    return gr """
-
-
-
-""" Il semble que l'exécution de la fonction graph_from_file a été interrompue à cause d'une erreur.
-L'erreur se produit lorsque la fonction essaie d'ajouter une arête au graphe en utilisant la méthode add_edge() de la classe Graph. 
-Il est difficile de déterminer la cause exacte de cette erreur sans plus d'informations, mais il est possible que cela soit dû à une erreur 
-de syntaxe dans le fichier d'entrée ou à une erreur de mémoire en raison d'un grand nombre de nœuds ou d'arêtes
-. Il est recommandé de vérifier le format du fichier d'entrée et de s'assurer qu'il est correctement structuré.
-Il peut également être utile de tester la fonction avec un fichier d'entrée plus petit pour déterminer si la
-taille du graphe est un facteur contribuant à l'erreur. """
-
-""" La complexité de la solution précédente est la suivante:
-
-Construction de l'arbre couvrant minimum : O(E log V), où E est le nombre d'arêtes et V est le nombre de sommets dans le graphe.
-
-Recherche du chemin entre les sommets de départ et d'arrivée dans l'arbre couvrant : O(E log V) (en utilisant une file de priorité).
-
-Calcul de la puissance minimale : O(T), où T est le nombre de trajets.
-
-Ainsi, la complexité totale est O((E+T) log V).
-
-En pratique, le temps d'exécution dépendra des données spécifiques, mais il est probable que la solution sera plus rapide que la première version du code car elle ne nécessite pas de calculer la liste des trajets à l'avance. De plus, l'utilisation d'un dictionnaire pour stocker les puissances minimales pour chaque trajet permettra une recherche efficace des valeurs nécessaires pour chaque chemin.
-
-Cependant, le temps d'exécution sera toujours proportionnel au nombre d'arêtes et de trajets dans le graphe, donc la complexité totale reste la même en termes de pire cas."""
+#### trier une liste selon le 3e élément des sous listes
+def quicksort(lst):
+    # Si la liste est vide ou ne contient qu'un élément, elle est considérée comme triée
+    if len(lst) <= 1:
+        return lst
+    
+    # Choix d'un pivot, ici le premier élément de la liste
+    pivot = lst[0]
+    
+    # Initialisation de trois listes vides pour stocker les éléments qui sont inférieurs,
+    # égaux ou supérieurs au pivot
+    less = []
+    greater = []
+    equal = []
+    
+    # Parcours de la liste pour répartir les éléments par rapport au pivot
+    for element in lst:
+        if element[2] < pivot[2]:
+            less.append(element) # Si l'élément est inférieur au pivot, il est stocké dans la liste less
+        elif element[2] > pivot[2]:
+            greater.append(element) # Si l'élément est supérieur au pivot, il est stocké dans la liste greater
+        else:
+            equal.append(element) # Si l'élément est égal au pivot, il est stocké dans la liste equal
+    
+    # Récursion de la fonction sur les listes less et greater, puis concaténation des trois listes (dans l'ordre : less, equal, greater)
+    return quicksort(less) + equal + quicksort(greater)
