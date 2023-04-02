@@ -4,7 +4,7 @@ from graph import Graph,graph_from_file,list_from_route
 def create_output_file(network_file_name,route_file_name):
     # On lit le fichier  network dcorrspondant et on crée l'arbre correspondant
     G =  graph_from_file(network_file_name)
-    Arbre=ACM_kruskal(G)
+    Arbre=kruskal(G)
     #on crée la liste des chemins
     l=list_from_route(route_file_name)
     # On ouvre le fichier de sortie en mode écriture
