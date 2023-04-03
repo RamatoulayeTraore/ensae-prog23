@@ -1,5 +1,5 @@
 import time
-from graph import Graph,graph_from_file,create_output_file
+from graph import Graph,graph_from_file,create_output_file,kruskal
 
 
 data_path = "input/"

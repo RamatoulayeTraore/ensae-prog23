@@ -283,7 +283,7 @@ def graph_from_file(filename):
     
 
 
-def kruskal(graph):
+""" def kruskal(graph):
     # Créer une structure de données ensemble-disjoint pour suivre les composantes connexes
     # du graphe. Chaque noeud commence dans son propre ensemble.
     disjoint_set = {node: {node} for node in graph.nodes}
@@ -320,7 +320,7 @@ def kruskal(graph):
         for item in r:
             gr.graph[item] = result.graph[item]
         gr.nb_edges = result.nb_edges
-    return gr
+    return gr """
 
 
 def list_from_route(filename):
@@ -358,3 +358,135 @@ def create_output_file(network_file_name,route_file_name):
             output_file.write(str(power_min_final) +'\n') # pour afficher les poids seulemen
             
     
+    # classe pour représenter un sommet de l'arbre
+class Node:
+    def __init__(self, id):
+        self.id = id
+        self.parent = self
+        self.rank = 0
+
+# classe pour représenter une arête
+class Edge:
+    def __init__(self, u, v, p):
+        self.u = u
+        self.v = v
+        self.p = p
+
+# algorithme de LCA
+def LCA(u, v, parents):
+    path = set()
+    while u != parents[u]:
+        path.add(u)
+        u = parents[u]
+    path.add(u)
+    while v != parents[v]:
+        if v in path:
+            return v
+        v = parents[v]
+    return v
+
+# algorithme de Kruskal avec l'algorithme de LCA
+def kruskal(G):
+    # trier les arêtes par poids croissant
+    edge = []
+    for x in G.nodes:
+        for neighbor in G.graph[x] : 
+            y,d= neighbor[0],neighbor[1]
+            if (((x,y,d) not in edge) and ((y,x,d) not in edge)):
+                e=Edge(x,y,d)
+                edge.append(e) 
+    edges= quicksort(edge)
+    
+    # initialiser les nœuds
+    nodes = {}
+    for e in edges:
+        nodes[e.u] = Node(e.u)
+        nodes[e.v] = Node(e.v)
+
+    # initialiser la structure de données pour le LCA
+    parents = {}
+    max_weight = {}
+    for node in nodes.values():
+        parents[node.id] = node.id
+        max_weight[node.id] = 0
+
+    # construire l'arbre
+    mst =Graph()
+    for e in edges:
+        u = nodes[e.u]
+        v = nodes[e.v]
+        u_root = u
+        v_root = v
+
+        # trouver les racines des arbres contenant u et v
+        while u_root.parent != u_root:
+            u_root = u_root.parent
+        while v_root.parent != v_root:
+            v_root = v_root.parent
+
+        # vérifier si u et v sont dans des arbres différents
+        if u_root != v_root:
+            mst.add_edge(e.u,e.v,e.p)
+
+            # unir les arbres en mettant la racine du plus petit sous l'arbre du plus grand
+            if u_root.rank < v_root.rank:
+                u_root.parent = v_root
+            elif u_root.rank > v_root.rank:
+                v_root.parent = u_root
+            else:
+                v_root.parent = u_root
+                u_root.rank += 1
+
+            # mettre à jour les poids maximaux sur le chemin entre u et v dans la structure de données pour le LCA
+            lca = Node(LCA(u.id, v.id, parents))
+            while u != lca:
+                u_parent = u.parent
+                max_weight[u.id] = e.p
+                u.parent = lca
+                u = u_parent
+            while v != lca:
+                v_parent = v.parent
+                max_weight[v.id] = e.p
+                v.parent = lca
+                v = v_parent
+
+            # mettre à jour les poids maximaux pour le LCA
+            max_weight[lca.id] = e.p
+            parents[lca.id] = lca.id
+    #pour ordonner le graphe selon les clés par l'ordre croissant afin que le test mst soit correct
+    mst.nodes.sort()
+    r= mst.nodes
+    arbre= Graph(r)
+    for item in r:
+        arbre.graph[item] = mst.graph[item]
+        arbre.nb_edges = mst.nb_edges
+
+    return arbre
+
+
+#### trier une liste selon le 3e élément des sous listes
+def quicksort(lst):
+    # Si la liste est vide ou ne contient qu'un élément, elle est considérée comme triée
+    if len(lst) <= 1:
+        return lst
+    
+    # Choix d'un pivot, ici le premier élément de la liste
+    pivot = lst[0]
+    
+    # Initialisation de trois listes vides pour stocker les éléments qui sont inférieurs,
+    # égaux ou supérieurs au pivot
+    less = []
+    greater = []
+    equal = []
+    
+    # Parcours de la liste pour répartir les éléments par rapport au pivot
+    for element in lst:
+        if element.p< pivot.p:
+            less.append(element) # Si l'élément est inférieur au pivot, il est stocké dans la liste less
+        elif element.p > pivot.p:
+            greater.append(element) # Si l'élément est supérieur au pivot, il est stocké dans la liste greater
+        else:
+            equal.append(element) # Si l'élément est égal au pivot, il est stocké dans la liste equal
+    
+    # Récursion de la fonction sur les listes less et greater, puis concaténation des trois listes (dans l'ordre : less, equal, greater)
+    return quicksort(less) + equal + quicksort(greater)
