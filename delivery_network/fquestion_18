@@ -1,0 +1,46 @@
+import math
+def binary_lifting(self):
+    log_n = int(math.ceil(math.log2(self.num_nodes)))
+    self.ancestor = [[-1] * self.num_nodes for i in range(log_n)]
+    self.power = [[0] * self.num_nodes for i in range(log_n)]
+
+    for i in range(self.num_nodes):
+        for j in range(len(self.graph[i])):
+            neighbor, power = self.graph[i][j]
+            self.ancestor[0][neighbor] = i
+            self.power[0][neighbor] = power
+
+    for i in range(1, log_n):
+        for j in range(self.num_nodes):
+            if self.ancestor[i-1][j] != -1:
+                ancestor = self.ancestor[i-1][j]
+                self.ancestor[i][j] = self.ancestor[i-1][ancestor]
+                self.power[i][j] = max(self.power[i-1][j], self.power[i-1][ancestor])
+
+def min_power_binary_lifting(self, start, end):
+    log_n = int(math.ceil(math.log2(self.num_nodes)))
+
+    if start == end:
+        return 0
+
+    if self.dist[start][end] == float('inf'):
+        return float('inf')
+
+    ancestor = start
+    power_min = 0
+
+    for i in range(log_n-1, -1, -1):
+        if self.ancestor[i][end] != -1 and self.dist[start][self.ancestor[i][end]] >= 2**i:
+            power_min = max(power_min, self.power[i][end])
+            end = self.ancestor[i][end]
+
+    if self.ancestor[0][end] == ancestor:
+        return power_min
+
+    for i in range(log_n-1, -1, -1):
+        if self.ancestor[i][ancestor] != self.ancestor[i][end]:
+            power_min = max(power_min, self.power[i][ancestor], self.power[i][end])
+            ancestor = self.ancestor[i][ancestor]
+            end = self.ancestor[i][end]
+
+    return max(power_min, self.power[0][ancestor], self.power[0][end])
