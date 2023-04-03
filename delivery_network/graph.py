@@ -338,10 +338,9 @@ class UF :
     
 
 
-def kruskal(G):
-    Pred,Res, Part, Larete= {},Graph(),{},[]
+""" def kruskal(G):
+    Res, Part, Larete= Graph(),{},[]
     for x in G.nodes:
-        Pred[x]=None
         Part[x]=UF(x)
         for neighbor in G.graph[x] : 
             y,d= neighbor[0],neighbor[1]
@@ -386,3 +385,4 @@ def quicksort(lst):
     
     # Récursion de la fonction sur les listes less et greater, puis concaténation des trois listes (dans l'ordre : less, equal, greater)
     return quicksort(less) + equal + quicksort(greater)
+ """
