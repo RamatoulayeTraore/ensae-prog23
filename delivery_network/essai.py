@@ -1,4 +1,4 @@
-from graph import Graph,graph_from_file,list_from_route,kruskal
+from graph import Graph,graph_from_file,list_from_route
 
 
 def create_output_file(network_file_name,route_file_name):
@@ -28,10 +28,10 @@ class Node:
 
 # classe pour représenter une arête
 class Edge:
-    def __init__(self, u, v, w):
+    def __init__(self, u, v, p):
         self.u = u
         self.v = v
-        self.w = w
+        self.p = p
 
 # algorithme de LCA
 def LCA(u, v, parents):
@@ -72,7 +72,7 @@ def kruskal(G):
         max_weight[node.id] = 0
 
     # construire l'arbre
-    mst = []
+    mst =Graph()
     for e in edges:
         u = nodes[e.u]
         v = nodes[e.v]
@@ -87,7 +87,7 @@ def kruskal(G):
 
         # vérifier si u et v sont dans des arbres différents
         if u_root != v_root:
-            mst.append(e)
+            mst.add_edge(e.u,e.v,e.p)
 
             # unir les arbres en mettant la racine du plus petit sous l'arbre du plus grand
             if u_root.rank < v_root.rank:
@@ -102,20 +102,27 @@ def kruskal(G):
             lca = Node(LCA(u.id, v.id, parents))
             while u != lca:
                 u_parent = u.parent
-                max_weight[u.id] = e.w
+                max_weight[u.id] = e.p
                 u.parent = lca
                 u = u_parent
             while v != lca:
                 v_parent = v.parent
-                max_weight[v.id] = e.w
+                max_weight[v.id] = e.p
                 v.parent = lca
                 v = v_parent
 
             # mettre à jour les poids maximaux pour le LCA
-            max_weight[lca.id] = e.w
+            max_weight[lca.id] = e.p
             parents[lca.id] = lca.id
+    #pour ordonner le graphe selon les clés par l'ordre croissant afin que le test mst soit correct
+    mst.nodes.sort()
+    r= mst.nodes
+    arbre= Graph(r)
+    for item in r:
+        arbre.graph[item] = mst.graph[item]
+        arbre.nb_edges = mst.nb_edges
 
-    return mst
+    return arbre
 
 
 #### trier une liste selon le 3e élément des sous listes
@@ -135,9 +142,9 @@ def quicksort(lst):
     
     # Parcours de la liste pour répartir les éléments par rapport au pivot
     for element in lst:
-        if element[2] < pivot[2]:
+        if element.p< pivot.p:
             less.append(element) # Si l'élément est inférieur au pivot, il est stocké dans la liste less
-        elif element[2] > pivot[2]:
+        elif element.p > pivot.p:
             greater.append(element) # Si l'élément est supérieur au pivot, il est stocké dans la liste greater
         else:
             equal.append(element) # Si l'élément est égal au pivot, il est stocké dans la liste equal
