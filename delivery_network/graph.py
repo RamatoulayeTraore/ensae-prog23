@@ -1,6 +1,7 @@
 import heapq
 import copy
 import graphviz
+import math
 
 class Graph:
     def __init__(self, nodes=[]):
@@ -8,6 +9,8 @@ class Graph:
         self.graph = dict([(n, []) for n in nodes])
         self.nb_nodes = len(nodes)
         self.nb_edges = 0
+        #nécessaire à pour le calcul de la puissance min par LCA
+        self.ancestors = dict()
 
 
     def __str__(self):
@@ -236,9 +239,58 @@ class Graph:
             else:
                 low = mid+1
 
-        return res        
-            
+        return res     
+
+    def preprocess(self):
+        self.ancestors = {node: [(node, 0)] for node in self.nodes}
+
+        max_distance = int(math.log(self.nb_nodes, 2)) + 1
+
+        for i in range(1, max_distance):
+            for node in self.nodes:
+                if len(self.ancestors[node]) >= i:
+                    ancestor = self.ancestors[node][i - 1][0]
+                    max_power = max(self.ancestors[node][i - 1][1], self.ancestors[ancestor][i - 1][1])
+                    self.ancestors[node].append((self.ancestors[ancestor][i - 1][0], max_power))
+
+    def min_power_arbre_2(self, start, end):
+        if start not in self.nodes or end not in self.nodes:
+            return None
+
+        if start == end:
+            return 0
+
+        max_distance = int(math.log(self.nb_nodes, 2)) + 1
+
+        path = [start, end]
+        path_ancestors = []
+
+        for i in range(max_distance, -1, -1):
+            ancestor = self.ancestors[path[-1]][i][0]
+
+            if ancestor == start:
+                path_ancestors.append(self.ancestors[path[-1]][i])
+                break
+
+            if ancestor == path[-2]:
+                path.append(self.ancestors[path[-1]][i][0])
+                path_ancestors.append(self.ancestors[path[-2]][i])
+            else:
+                path.append(ancestor)
+                path_ancestors.append(self.ancestors[path[-2]][i])
+                path_ancestors.append(self.ancestors[path[-1]][i])
+
+        min_power = float('inf')
+
+        for i in range(len(path_ancestors) - 1, -1, -1):
+            power = path_ancestors[i][1]
+
+            if power < min_power:
+                min_power = power
+
+        return min_power   
     
+
 
 
 def graph_from_file(filename):
