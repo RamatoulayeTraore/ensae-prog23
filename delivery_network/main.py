@@ -1,6 +1,7 @@
 import time
 from graph import Graph,graph_from_file
 from essai import create_output_file,kruskal
+from fquestion_18 import min_power_binary_lifting
 
 
 
