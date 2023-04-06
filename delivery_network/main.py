@@ -1,7 +1,7 @@
 import time
 from graph import Graph,graph_from_file
 from essai import create_output_file,kruskal
-from fquestion_18 import min_power_binary_lifting
+
 
 
 
@@ -10,8 +10,9 @@ file_name = "network.01.in"
 
 """ g=graph_from_file("input/network.5.in")
 print(g) """
-#g = graph_from_file("input/network.2.in")
-#print(kruskal(g))
+g = graph_from_file("input/network.00.in")
+r=kruskal(g)
+print(r)
 ####test_route_7
 """ t0 = time.perf_counter()
 g.min_power(4,12)
@@ -40,4 +41,5 @@ print("temps moy2",tmps_moy2)
 #print(g)
 #t1=time.perf_counter()
 #print("temps",t1-to)
-create_output_file("input/network.2.in","input/routes.2.in")
+#create_output_file("input/network.2.in","input/routes.2.in")
+print("lhjkhkhkgk",r.min_power_arbre_2(1,4))
