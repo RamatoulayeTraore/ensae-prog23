@@ -281,8 +281,6 @@ class Graph:
         # Parcours des ancêtres de end, depuis le plus lointain jusqu'au plus proche
         for i in range(max_distance, -1, -1):
             # Récupération de l'ancêtre de end à la distance i
-            if path[-1] not in self.ancestors or i >= len(self.ancestors[path[-1]]):
-                continue
             ancestor = self.ancestors[path[-1]][i][0]
 
             # Si l'ancêtre est start, on ajoute ses informations aux path_ancestors et on sort de la boucle
