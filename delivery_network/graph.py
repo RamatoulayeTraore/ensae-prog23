@@ -9,8 +9,8 @@ class Graph:
         self.graph = dict([(n, []) for n in nodes])
         self.nb_nodes = len(nodes)
         self.nb_edges = 0
-        #nécessaire à pour le calcul de la puissance min par LCA
-        self.ancestors = dict()
+        #nécessaire à pour le calcul de la puissance min question16
+        self.ancestors = {}
 
 
     def __str__(self):
@@ -244,7 +244,8 @@ class Graph:
     def preprocess(self):
         # On initialise les ancêtres de chaque nœud avec lui-même et une puissance minimale de 0
         self.ancestors = {node: [(node, 0)] for node in self.nodes}
-
+        rt=self.nb_nodes
+        print("++++++++++",rt)
         # On calcule la puissance maximale à utiliser dans l'algorithme de doubling
         max_distance = int(math.log(self.nb_nodes, 2)) + 1
 
@@ -282,6 +283,8 @@ class Graph:
         # Parcours des ancêtres de end, depuis le plus lointain jusqu'au plus proche
         for i in range(max_distance, -1, -1):
             # Récupération de l'ancêtre de end à la distance i
+            if path[-1] not in self.ancestors or i >= len(self.ancestors[path[-1]]):
+                continue
             ancestor = self.ancestors[path[-1]][i][0]
 
             # Si l'ancêtre est start, on ajoute ses informations aux path_ancestors et on sort de la boucle
@@ -291,8 +294,7 @@ class Graph:
 
             # Si l'ancêtre est un noeud du chemin, on l'ajoute au chemin et on ajoute ses informations aux path_ancestors
             if ancestor == path[-2]:
-                c=path[-1]
-                path.append(self.ancestors[c][i][0])
+                path.append(self.ancestors[path[-1]][i][0])
                 path_ancestors.append(self.ancestors[path[-2]][i])
             # Si l'ancêtre est un noeud différent du chemin, on l'ajoute au chemin et on ajoute ses informations aux path_ancestors
             else:
