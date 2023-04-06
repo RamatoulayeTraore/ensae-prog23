@@ -291,7 +291,8 @@ class Graph:
 
             # Si l'ancêtre est un noeud du chemin, on l'ajoute au chemin et on ajoute ses informations aux path_ancestors
             if ancestor == path[-2]:
-                path.append(self.ancestors[path[-1]][i][0])
+                c=path[-1]
+                path.append(self.ancestors[c][i][0])
                 path_ancestors.append(self.ancestors[path[-2]][i])
             # Si l'ancêtre est un noeud différent du chemin, on l'ajoute au chemin et on ajoute ses informations aux path_ancestors
             else:
