@@ -12,7 +12,6 @@ class Graph:
         #nécessaire à pour le calcul de la puissance min question16
         self.ancestors = {}
 
-
     def __str__(self):
         """Prints the graph as a list of neighbors for each node (one per line)"""
         if not self.graph:
@@ -244,22 +243,22 @@ class Graph:
     def preprocess(self):
         # On initialise les ancêtres de chaque nœud avec lui-même et une puissance minimale de 0
         self.ancestors = {node: [(node, 0)] for node in self.nodes}
-        print("++++++++++",self.nb_nodes)
         # On calcule la puissance maximale à utiliser dans l'algorithme de doubling
         max_distance = int(math.log(self.nb_nodes, 2)) + 1
 
         # On parcourt chaque puissance de 2 jusqu'à la puissance maximale
-        for i in range(1, max_distance):
+        for i in range(max_distance):
             # On parcourt chaque nœud du graphe
             for node in self.nodes:
                 # Si le nœud a déjà au moins i ancêtres, on peut ajouter son i-ème ancêtre
-                if len(self.ancestors[node]) >= i:
-                    # On remonte l'arbre en prenant l'ancêtre de puissance 2^(i-1)
-                    ancestor = self.ancestors[node][i - 1][0]
-                    # On calcule la puissance minimale maximale entre le nœud et son ancêtre de puissance 2^(i-1)
-                    max_power = max(self.ancestors[node][i - 1][1], self.ancestors[ancestor][i - 1][1])
+                if len(self.ancestors[node]) > i:
+                    # On remonte l'arbre en prenant l'ancêtre de puissance 2^i
+                    ancestor = self.ancestors[node][i][0]
+                    # On calcule la puissance minimale maximale entre le nœud et son ancêtre de puissance 2^i
+                    max_power = max(self.ancestors[node][i][1], self.ancestors[ancestor][i][1])
                     # On ajoute l'i-ème ancêtre du nœud avec la puissance minimale maximale
-                    self.ancestors[node].append((self.ancestors[ancestor][i - 1][0], max_power))
+                    self.ancestors[node].append((self.ancestors[ancestor][i][0], max_power))
+
 
 
     def min_power_arbre_2(self, start, end):
