@@ -244,8 +244,7 @@ class Graph:
     def preprocess(self):
         # On initialise les ancêtres de chaque nœud avec lui-même et une puissance minimale de 0
         self.ancestors = {node: [(node, 0)] for node in self.nodes}
-        rt=self.nb_nodes
-        print("++++++++++",rt)
+        print("++++++++++",self.nb_nodes)
         # On calcule la puissance maximale à utiliser dans l'algorithme de doubling
         max_distance = int(math.log(self.nb_nodes, 2)) + 1
 
