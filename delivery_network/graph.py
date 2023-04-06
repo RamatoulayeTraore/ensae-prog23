@@ -1,5 +1,5 @@
 import heapq
-import copy
+import math
 import graphviz
 
 class Graph:
@@ -254,6 +254,78 @@ class Graph:
 
         return res        
             
+    ###### question 16############
+    def preprocess(self):
+            # On initialise les ancêtres de chaque nœud avec lui-même et une puissance minimale de 0
+            self.ancestors = {node: [(node, 0)] for node in self.nodes}
+            # On calcule la puissance maximale à utiliser dans l'algorithme de doubling
+            max_distance = int(math.log(self.nb_nodes, 2)) + 1
+
+            # On parcourt chaque puissance de 2 jusqu'à la puissance maximale
+            for i in range(max_distance):
+                # On parcourt chaque nœud du graphe
+                for node in self.nodes:
+                    # Si le nœud a déjà au moins i ancêtres, on peut ajouter son i-ème ancêtre
+                    if len(self.ancestors[node]) > i:
+                        # On remonte l'arbre en prenant l'ancêtre de puissance 2^i
+                        ancestor = self.ancestors[node][i][0]
+                        # On calcule la puissance minimale maximale entre le nœud et son ancêtre de puissance 2^i
+                        max_power = max(self.ancestors[node][i][1], self.ancestors[ancestor][i][1])
+                        # On ajoute l'i-ème ancêtre du nœud avec la puissance minimale maximale
+                        self.ancestors[node].append((self.ancestors[ancestor][i][0], max_power))
+
+
+
+    def min_power_arbre_2(self, start, end):
+            # Vérifie si les noeuds start et end existent dans le graphe
+            if start not in self.nodes or end not in self.nodes:
+                return None
+
+            # Cas où start et end sont identiques, donc la puissance nécessaire est de 0
+            if start == end:
+                return 0
+
+            # Calcul de la distance maximale entre les noeuds du graphe
+            max_distance = int(math.log(self.nb_nodes, 2)) + 1
+
+            # Initialisation du chemin entre start et end
+            path = [start, end]
+            # Initialisation des ancêtres du chemin
+            path_ancestors = []
+
+            # Parcours des ancêtres de end, depuis le plus lointain jusqu'au plus proche
+            for i in range(max_distance, -1, -1):
+                # Récupération de l'ancêtre de end à la distance i
+                ancestor = self.ancestors[path[-1]][i][0]
+
+                # Si l'ancêtre est start, on ajoute ses informations aux path_ancestors et on sort de la boucle
+                if ancestor == start:
+                    path_ancestors.append(self.ancestors[path[-1]][i])
+                    break
+
+                # Si l'ancêtre est un noeud du chemin, on l'ajoute au chemin et on ajoute ses informations aux path_ancestors
+                if ancestor == path[-2]:
+                    path.append(self.ancestors[path[-1]][i][0])
+                    path_ancestors.append(self.ancestors[path[-2]][i])
+                # Si l'ancêtre est un noeud différent du chemin, on l'ajoute au chemin et on ajoute ses informations aux path_ancestors
+                else:
+                    path.append(ancestor)
+                    path_ancestors.append(self.ancestors[path[-2]][i])
+                    path_ancestors.append(self.ancestors[path[-1]][i])
+
+            # Initialisation de la puissance minimale nécessaire à l'infini
+            min_power = float('inf')
+
+            # Parcours des informations des ancêtres du chemin, depuis les plus proches jusqu'aux plus lointains
+            for i in range(len(path_ancestors) - 1, -1, -1):
+                power = path_ancestors[i][1]
+
+                # Si la puissance de l'ancêtre est inférieure à la puissance minimale actuelle, on la remplace
+                if power < min_power:
+                    min_power = power
+
+            # Renvoie la puissance minimale nécessaire pour parcourir le chemin entre start et end
+            return min_power
     
 def graph_from_file(filename):
     # import graph from a file
@@ -490,3 +562,5 @@ def quicksort(lst):
     
     # Récursion de la fonction sur les listes less et greater, puis concaténation des trois listes (dans l'ordre : less, equal, greater)
     return quicksort(less) + equal + quicksort(greater)
+
+
